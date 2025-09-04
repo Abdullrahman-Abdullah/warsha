@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - فنيونا المختصون</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2D5B7A;
+            --secondary: #4F8A8B;
+            --accent: #FFCB74;
+            --light: #F8F5F0;
+            --dark: #2C3E50;
+            --success: #5CB85C;
+            --warning: #F0AD4E;
+            --danger: #D9534F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: #FFB74D;
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(45, 91, 122, 0.9), rgba(45, 91, 122, 0.85)), url('https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 10px;
+        }
+
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            margin: 0 10px;
+            font-size: 12px;
+        }
+
+        /* Filters Section */
+        .filters {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .filters h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        /* Technicians Section */
+        .technicians {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .technicians-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .technician-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .technician-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .technician-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 20px;
+            position: relative;
+        }
+
+        .technician-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .technician-avatar i {
+            font-size: 40px;
+            color: var(--primary);
+        }
+
+        .technician-name {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .technician-title {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .technician-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .technician-content {
+            padding: 25px;
+        }
+
+        .technician-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .technician-skills {
+            margin-bottom: 25px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .technician-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-secondary , .btn-primary{
+            background: var(--accent);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 10px;
+        }
+
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: white;
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .pagination-item:hover:not(.active) {
+            background: var(--light);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 15px;
+            margin: 80px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.98)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs><pattern id="tools" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M20,20 L30,10 L40,20 L30,30 Z" fill="%23FFCB74" opacity="0.2"/><circle cx="70" cy="30" r="8" fill="%234F8A8B" opacity="0.2"/><rect x="60" cy="60" width="15" height="15" transform="translate(60 60) rotate(45)" fill="%232D5B7A" opacity="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(%23tools)"/></svg>');
+            /*background-size: 300px 300px;*/
+            background-position: center center;
+            color: white;
+            padding: 50px 0 25px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 203, 116, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(79, 138, 139, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 40% 80%, rgba(45, 91, 122, 0.15) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .footer-tools-icon {
+            position: absolute;
+            opacity: 0.07;
+            font-size: 200px;
+            color: var(--accent);
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .footer-column ul li:hover {
+            transform: translateX(-5px);
+        }
+
+        .footer-column ul li i {
+            margin-left: 10px;
+            color: var(--accent);
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-column a i {
+            margin-left: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 50%;
+        }
+
+        .social-links a:hover::before {
+            opacity: 1;
+        }
+
+        .social-links a i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: #bbb;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .tools-icons {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .tools-icons i {
+            position: absolute;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .tools-icons i:nth-child(1) { top: 15%; left: 10%; }
+        .tools-icons i:nth-child(2) { top: 25%; right: 15%; }
+        .tools-icons i:nth-child(3) { bottom: 30%; left: 20%; }
+        .tools-icons i:nth-child(4) { bottom: 15%; right: 25%; }
+        .tools-icons i:nth-child(5) { top: 40%; left: 30%; }
+        .tools-icons i:nth-child(6) { bottom: 40%; right: 10%; }
+        .tools-icons i:nth-child(7) { top: 10%; right: 30%; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            header{
+                position:relative;
+                width:100svw;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .technicians-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .technician-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i>
+                    <h1>ورشة</h1>
+                </div>
+                <nav>
+                    <ul>
+                       <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="services.html">الخدمات</a></li>
+                        <li><a href="technicians.html" class="active">فنيونا</a></li>
+                        <li><a href="my-orders.html">طلباتي</a></li>
+                        <li><a href="help.html" >المساعدة</a></li>
+                      </ul>
+                </nav>
+                
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h2>فنيونا المختصون</h2>
+            <ul class="breadcrumb">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li>فنيونا</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="container">
+        <div class="filters">
+            <h3>ابحث عن الفني المناسب</h3>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="specialty">التخصص</label>
+                    <select id="specialty" class="filter-select">
+                        <option value="">جميع التخصصات</option>
+                        <option value="كهرباء">كهرباء</option>
+                        <option value="سباكة">سباكة</option>
+                        <option value="دهان">دهان</option>
+                        <option value="نجارة">نجارة</option>
+                        <option value="تكييف">تكييف</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="city">المدينة</label>
+                    <select id="city" class="filter-select">
+                        <option value="">جميع المدن</option>
+                        <option value="دمشق">دمشق</option>
+                        <option value="حلب">حلب</option>
+                        <option value="حمص">حمص</option>
+                        <option value="اللاذقية">اللاذقية</option>
+                        <option value="حماة">حماة</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="rating">التقييم</label>
+                    <select id="rating" class="filter-select">
+                        <option value="">جميع التقييمات</option>
+                        <option value="5">5 نجوم</option>
+                        <option value="4">4 نجوم فأكثر</option>
+                        <option value="3">3 نجوم فأكثر</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="search">بحث بالاسم</label>
+                    <div class="search-box">
+                        <input type="text" id="search" placeholder="ابحث عن فني...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technicians Section -->
+    <section class="container">
+        <div class="technicians">
+            <div class="section-title">
+                <h2>فنيونا المعتمدون</h2>
+                <p>اختر من بين أمهر الفنيين والخبراء في مجال الصيانة المنزلية</p>
+            </div>
+            
+            <div class="technicians-grid">
+                <!-- Technician 1 -->
+                <div class="technician-card">
+                    <div class="technician-header">
+                        <div class="technician-badge">ممتاز</div>
+                        <div class="technician-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="technician-name">عماد السعدي</h3>
+                        <p class="technician-title">فني كهرباء معتمد</p>
+                    </div>
+                    <div class="technician-content">
+                        <div class="technician-stats">
+                            <div class="stat">
+                                <div class="stat-number">4.9</div>
+                                <div class="stat-label">التقييم</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">127</div>
+                                <div class="stat-label">الخدمات</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">سنوات</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-skills">
+                            <div class="skills-list">
+                                <span class="skill-tag">إصلاح أعطال</span>
+                                <span class="skill-tag">تركيب إنارة</span>
+                                <span class="skill-tag">لوحات توزيع</span>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-actions">
+                            <button class="btn-primary">طلب الخدمة</button>
+                            <button class="btn-secondary">عرض الملف</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technician 2 -->
+                <div class="technician-card">
+                    <div class="technician-header">
+                        <div class="technician-badge">شهير</div>
+                        <div class="technician-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="technician-name">سليم الحلبي</h3>
+                        <p class="technician-title">فني سباكة معتمد</p>
+                    </div>
+                    <div class="technician-content">
+                        <div class="technician-stats">
+                            <div class="stat">
+                                <div class="stat-number">4.8</div>
+                                <div class="stat-label">التقييم</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">94</div>
+                                <div class="stat-label">الخدمات</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">7</div>
+                                <div class="stat-label">سنوات</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-skills">
+                            <div class="skills-list">
+                                <span class="skill-tag">إصلاح تسربات</span>
+                                <span class="skill-tag">تركيب خلاطات</span>
+                                <span class="skill-tag">صيانة سخانات</span>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-actions">
+                            <button class="btn-primary">طلب الخدمة</button>
+                            <button class="btn-secondary">عرض الملف</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technician 3 -->
+                <div class="technician-card">
+                    <div class="technician-header">
+                        <div class="technician-badge">جديد</div>
+                        <div class="technician-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="technician-name">مازن الدغلي</h3>
+                        <p class="technician-title">فني دهان معتمد</p>
+                    </div>
+                    <div class="technician-content">
+                        <div class="technician-stats">
+                            <div class="stat">
+                                <div class="stat-number">4.7</div>
+                                <div class="stat-label">التقييم</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">63</div>
+                                <div class="stat-label">الخدمات</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">3</div>
+                                <div class="stat-label">سنوات</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-skills">
+                            <div class="skills-list">
+                                <span class="skill-tag">دهان جدران</span>
+                                <span class="skill-tag">طلاء أخشاب</span>
+                                <span class="skill-tag">ديكورات</span>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-actions">
+                            <button class="btn-primary">طلب الخدمة</button>
+                            <button class="btn-secondary">عرض الملف</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technician 4 -->
+                <div class="technician-card">
+                    <div class="technician-header">
+                        <div class="technician-badge">ممتاز</div>
+                        <div class="technician-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="technician-name">يوسف الحمصي</h3>
+                        <p class="technician-title">فني تكييف معتمد</p>
+                    </div>
+                    <div class="technician-content">
+                        <div class="technician-stats">
+                            <div class="stat">
+                                <div class="stat-number">4.9</div>
+                                <div class="stat-label">التقييم</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">112</div>
+                                <div class="stat-label">الخدمات</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">6</div>
+                                <div class="stat-label">سنوات</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-skills">
+                            <div class="skills-list">
+                                <span class="skill-tag">صيانة مكيفات</span>
+                                <span class="skill-tag">تنظيف</span>
+                                <span class="skill-tag">إصلاح أعطال</span>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-actions">
+                            <button class="btn-primary">طلب الخدمة</button>
+                            <button class="btn-secondary">عرض الملف</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technician 5 -->
+                <div class="technician-card">
+                    <div class="technician-header">
+                        <div class="technician-badge">متميز</div>
+                        <div class="technician-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="technician-name">خالد القادري</h3>
+                        <p class="technician-title">فني نجارة معتمد</p>
+                    </div>
+                    <div class="technician-content">
+                        <div class="technician-stats">
+                            <div class="stat">
+                                <div class="stat-number">4.8</div>
+                                <div class="stat-label">التقييم</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">78</div>
+                                <div class="stat-label">الخدمات</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">سنوات</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-skills">
+                            <div class="skills-list">
+                                <span class="skill-tag">تصليح أثاث</span>
+                                <span class="skill-tag">تركيب أرفف</span>
+                                <span class="skill-tag">أعمال نجارة</span>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-actions">
+                            <button class="btn-primary">طلب الخدمة</button>
+                            <button class="btn-secondary">عرض الملف</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technician 6 -->
+                <div class="technician-card">
+                    <div class="technician-header">
+                        <div class="technician-badge">ممتاز</div>
+                        <div class="technician-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="technician-name">علي الاسد</h3>
+                        <p class="technician-title">فني متعدد المهارات</p>
+                    </div>
+                    <div class="technician-content">
+                        <div class="technician-stats">
+                            <div class="stat">
+                                <div class="stat-number">4.9</div>
+                                <div class="stat-label">التقييم</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">156</div>
+                                <div class="stat-label">الخدمات</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">8</div>
+                                <div class="stat-label">سنوات</div>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-skills">
+                            <div class="skills-list">
+                                <span class="skill-tag">كهرباء</span>
+                                <span class="skill-tag">سباكة</span>
+                                <span class="skill-tag">تكييف</span>
+                            </div>
+                        </div>
+                        
+                        <div class="technician-actions">
+                            <button class="btn-primary">طلب الخدمة</button>
+                            <button class="btn-secondary">عرض الملف</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pagination">
+                <div class="pagination-item active">1</div>
+                <div class="pagination-item">2</div>
+                <div class="pagination-item">3</div>
+                <div class="pagination-item">></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container">
+        <div class="cta-section">
+            <h2>انضم إلى فريق فنيينا</h2>
+            <p>هل أنت فني محترف؟ انضم إلى منصة ورشة واربح المزيد من العملاء</p>
+            <button class="btn btn-primary" style="padding: 15px 30px; font-size: 18px;">تسجيل كفني</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <i class="fas fa-tools footer-tools-icon"></i>
+        
+        <div class="tools-icons">
+            <i class="fas fa-wrench"></i>
+            <i class="fas fa-screwdriver"></i>
+            <i class="fas fa-hammer"></i>
+            <i class="fas fa-bolt"></i>
+            <i class="fas fa-paint-roller"></i>
+            <i class="fas fa-toolbox"></i>
+            <i class="fas fa-tape"></i>
+        </div>
+
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-tools"></i>
+                        <h3>ورشة</h3>
+                    </div>
+                    <p>تطبيق ورشة يوفر لك أفضل الحرفيين والمهنيين لخدمات إصلاح المنازل بجودة عالية وضمان على العمل.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                        <li><a href="services.html"><i class="fas fa-concierge-bell"></i> الخدمات</a></li>
+                        <li><a href="technicians.html"><i class="fas fa-users"></i> فنيونا</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> حولنا</a></li>
+                        <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>خدماتنا</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-bolt"></i> خدمات الكهرباء</a></li>
+                        <li><a href="#"><i class="fas fa-faucet"></i> خدمات السباكة</a></li>
+                        <li><a href="#"><i class="fas fa-paint-roller"></i> خدمات الدهان</a></li>
+                        <li><a href="#"><i class="fas fa-hammer"></i> خدمات النجارة</a></li>
+                        <li><a href="#"><i class="fas fa-fan"></i> خدمات التكييف</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>اتصل بنا</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> دمشق، سوريا</li>
+                        <li><i class="fas fa-phone"></i> 963123456789+</li>
+                        <li><i class="fas fa-envelope"></i> info@warshaapp.com</li>
+                        <li><i class="fas fa-clock"></i> من الأحد إلى الخميس</li>
+                        <li><i class="fas fa-globe"></i> 8:00 ص - 6:00 م</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 ورشة. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تفعيل البحث والتصفية
+            const searchInput = document.getElementById('search');
+            const specialtyFilter = document.getElementById('specialty');
+            const cityFilter = document.getElementById('city');
+            const ratingFilter = document.getElementById('rating');
+            const technicianCards = document.querySelectorAll('.technician-card');
+            
+            function filterTechnicians() {
+                const searchText = searchInput.value.toLowerCase();
+                const specialtyValue = specialtyFilter.value;
+                const cityValue = cityFilter.value;
+                const ratingValue = ratingFilter.value;
+                
+                technicianCards.forEach(card => {
+                    const name = card.querySelector('.technician-name').textContent.toLowerCase();
+                    const title = card.querySelector('.technician-title').textContent.toLowerCase();
+                    const rating = parseFloat(card.querySelector('.stat-number').textContent);
+                    
+                    const matchesSearch = name.includes(searchText) || title.includes(searchText);
+                    const matchesSpecialty = !specialtyValue || title.includes(specialtyValue);
+                    const matchesRating = !ratingValue || rating >= parseFloat(ratingValue);
+                    
+                    if (matchesSearch && matchesSpecialty && matchesRating) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            searchInput.addEventListener('input', filterTechnicians);
+            specialtyFilter.addEventListener('change', filterTechnicians);
+            cityFilter.addEventListener('change', filterTechnicians);
+            ratingFilter.addEventListener('change', filterTechnicians);
+            
+            // تفعيل أزرار طلب الخدمة
+            const requestButtons = document.querySelectorAll('.btn-primary');
+            requestButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const technicianName = this.closest('.technician-card').querySelector('.technician-name').textContent;
+                    alert(`جاري توجيهك لطلب خدمة من ${technicianName}`);
+                });
+            });
+            
+            // تفعيل أزرار عرض الملف
+            const profileButtons = document.querySelectorAll('.btn-secondary');
+            profileButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const technicianName = this.closest('.technician-card').querySelector('.technician-name').textContent;
+                    alert(`جاري تحميل الملف الشخصي للفني ${technicianName}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

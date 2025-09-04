@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - طلباتي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modern Color Palette */
+        :root {
+            --primary-blue: #0A3D62; /* Darker Blue */
+            --secondary-teal: #077987; /* Complementary Teal */
+            --accent-orange: #FF8C00; /* Bright Orange Accent */
+            --light-bg: #F0F4F8; /* Light background for sections */
+            --white: #ffffff;
+            --gray-text: #555;
+            --dark-text: #222;
+            --border-light: #e0e0e0;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+            /* Status Colors */
+            --status-pending: #FFD166; /* Yellowish for Pending */
+            --status-confirmed: #66BB6A; /* Green for Confirmed */
+            --status-in-progress: #2196F3; /* Blue for In Progress */
+            --status-completed: #4CAF50; /* Darker Green for Completed */
+            --status-cancelled: #F44336; /* Red for Cancelled */
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif; /* Modern Arabic-friendly font */
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem; /* Increased padding for better spacing */
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-teal));
+            color: var(--white);
+            padding: 1.2rem 0;
+            box-shadow: var(--shadow-medium);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent-orange);
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem; /* More spacing between nav items */
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            font-weight: 500;
+            transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            position: relative;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--accent-orange);
+            transform: translateY(-2px);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; /* Slightly lower for better visual */
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-orange);
+            border-radius: 2px;
+        }
+        
+        /* Page Hero Section */
+        .page-hero {
+            background: linear-gradient(rgba(10, 61, 98, 0.8), rgba(7, 121, 135, 0.7)), url('https://images.unsplash.com/photo-1560472355-536de3962603');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 5rem 0; /* More vertical padding */
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom-left-radius: 2rem;
+            border-bottom-right-radius: 2rem;
+            overflow: hidden; /* Ensures rounded corners are applied correctly */
+        }
+
+        .page-hero h2 {
+            font-size: 2.8rem; /* Larger, more impactful heading */
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-orange);
+            transition: color 0.3s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--white);
+        }
+        
+        .breadcrumb i {
+            margin: 0 0.4rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr; /* Stacked on mobile */
+            margin-bottom: 3rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--white);
+            padding: 2rem 1.5rem;
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow-light);
+            height: fit-content; /* Adjusts height to content */
+        }
+
+        .user-profile {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .user-avatar {
+            width: 6rem; /* Larger avatar */
+            height: 6rem;
+            background: var(--light-bg);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            border: 3px solid var(--primary-blue);
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-email {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1.2rem;
+            color: var(--gray-text);
+            border-radius: 0.8rem;
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 0.6rem;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(to left, var(--primary-blue), var(--secondary-teal));
+            color: var(--white);
+            box-shadow: var(--shadow-light);
+            transform: translateX(-5px);
+        }
+        
+        .sidebar-menu i {
+            margin-left: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Orders Content */
+        .orders-main-content {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .orders-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .orders-section-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+        
+        .orders-filter-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            padding: 0.7rem 1.2rem;
+            border: 1px solid var(--border-light);
+            border-radius: 0.7rem;
+            font-size: 0.95rem;
+            background-color: var(--white);
+            appearance: none; /* Remove default arrow */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 0.8rem center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .filter-select:hover, .filter-select:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+        }
+        
+        /* Orders Tabs */
+        .orders-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 2rem;
+            padding-bottom: 0.7rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .orders-tabs::-webkit-scrollbar {
+            display: none; /* Hide scrollbar */
+        }
+
+        .order-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray-text);
+            transition: all 0.3s ease-in-out;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .order-tab:hover {
+            color: var(--primary-blue);
+        }
+
+        .order-tab.active {
+            color: var(--primary-blue);
+            border-bottom: 3px solid var(--primary-blue);
+        }
+
+        .order-tab-badge {
+            background: var(--accent-orange);
+            color: var(--white);
+            padding: 3px 9px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.4rem;
+            vertical-align: middle;
+        }
+
+        /* Order Cards */
+        .orders-grid {
+            display: grid;
+            gap: 1.8rem;
+        }
+
+        .order-card {
+            background: var(--white);
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid var(--border-light);
+        }
+        
+        .order-card:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-blue);
+        }
+        
+        .order-card-header {
+            background: var(--light-bg);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+
+        .order-date {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+
+        .order-card-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr; /* Stacked on mobile */
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .order-service-icon {
+            width: 5.5rem;
+            height: 5.5rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: var(--white);
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-details {
+            text-align: center;
+        }
+
+        .order-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .order-details p {
+            font-size: 0.95rem;
+            color: var(--gray-text);
+            margin-bottom: 0.75rem;
+        }
+
+        .order-technician {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .technician-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--primary-blue);
+            margin-left: 0.75rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .technician-name {
+            font-size: 0.95rem;
+            color: var(--gray-text);
+        }
+
+        .order-status-info {
+            text-align: center;
+            margin-top: 1.2rem;
+        }
+
+        .status-badge {
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--white);
+            display: inline-block;
+        }
+
+        .status-pending { background-color: var(--status-pending); }
+        .status-confirmed { background-color: var(--status-confirmed); }
+        .status-in-progress { background-color: var(--status-in-progress); }
+        .status-completed { background-color: var(--status-completed); }
+        .status-cancelled { background-color: var(--status-cancelled); }
+
+        .order-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-top: 0.75rem;
+        }
+
+        .order-card-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-direction: column; /* Stacked on mobile */
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.8rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+        }
+        
+        .action-btn-primary {
+            background: linear-gradient(to right, var(--accent-orange), #FFB600);
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(255, 140, 0, 0.3);
+        }
+        .action-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        .action-btn-secondary:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+        
+        .action-btn-danger {
+            background: transparent;
+            border: 2px solid var(--status-cancelled);
+            color: var(--status-cancelled);
+        }
+        .action-btn-danger:hover {
+            background: var(--status-cancelled);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        /* Order Tracking */
+        .order-tracking-section {
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-top: 1px solid var(--border-light);
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .order-tracking-section.active {
+            max-height: 250px; /* Increased max-height */
+            opacity: 1;
+        }
+
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tracking-steps::before {
+            content: '';
+            position: absolute;
+            top: 1.6rem; /* Adjust line position */
+            right: 0;
+            left: 0;
+            height: 3px; /* Thicker line */
+            background: var(--border-light);
+            z-index: 1;
+        }
+
+        .tracking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-icon {
+            width: 3rem; /* Larger icons */
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--gray-text);
+            margin-bottom: 0.7rem;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .step-active .step-icon {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: var(--white);
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(10, 61, 98, 0.3);
+        }
+        
+        .step-completed .step-icon {
+            background: var(--status-completed);
+            border-color: var(--status-completed);
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .step-active .step-label {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        .step-completed .step-label {
+            color: var(--status-completed);
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            color: var(--gray-text);
+        }
+
+        .empty-state i {
+            font-size: 5rem; /* Larger icon */
+            color: var(--border-light);
+            margin-bottom: 2rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-text);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            border-top: 5px solid var(--accent-orange);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            text-align: center; /* Center content for mobile */
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            display: inline-block; /* For the underline effect */
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent-orange);
+            border-radius: 2px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.8rem;
+            transition: all 0.2s ease-in-out;
+            font-size: 0.95rem;
+            display: flex; /* For consistent icon alignment */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-column li:hover {
+            color: var(--accent-orange);
+            transform: translateX(-5px);
+        }
+        
+        .footer-column li i {
+            margin-left: 0.7rem;
+            color: var(--accent-orange);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1.8rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            width: 2.8rem;
+            height: 2.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--white);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-orange);
+            color: var(--primary-blue);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .header-content {
+                flex-wrap: nowrap;
+            }
+            nav ul {
+                justify-content: flex-end;
+            }
+
+            .dashboard-layout {
+                grid-template-columns: 300px 1fr; /* Sidebar on left, content on right */
+            }
+
+            .orders-section-header {
+                flex-wrap: nowrap;
+            }
+            .orders-filter-group {
+                flex-wrap: nowrap;
+            }
+
+            .order-card-body {
+                grid-template-columns: 120px 1fr auto; /* Icon, details, status/price */
+                text-align: initial;
+            }
+            
+            .order-service-icon {
+                margin: 0;
+            }
+            
+            .order-details {
+                text-align: initial;
+            }
+
+            .order-technician {
+                justify-content: flex-start;
+            }
+            
+            .order-status-info {
+                margin-top: 0;
+                text-align: right;
+            }
+            
+            .order-card-actions {
+                flex-direction: row; /* Buttons side-by-side */
+                justify-content: flex-end;
+            }
+
+            .footer-column li {
+                justify-content: flex-start;
+            }
+
+            .footer-column h3::after {
+                left: 0;
+                transform: translateX(0);
+            }
+            .social-links {
+                justify-content: flex-start;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 1rem;
+            }
+            .page-hero h2 {
+                font-size: 2.2rem;
+            }
+            .orders-section-header h2 {
+                font-size: 1.5rem;
+            }
+            .orders-main-content {
+                padding: 1.5rem;
+            }
+            .sidebar {
+                padding: 1rem;
+            }
+            .user-avatar {
+                width: 4.5rem;
+                height: 4.5rem;
+                font-size: 2rem;
+            }
+            .user-name {
+                font-size: 1.1rem;
+            }
+            .order-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .order-card-body {
+                padding: 1rem;
+            }
+            .order-card-actions {
+                padding: 1rem;
+            }
+            .tracking-steps {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: space-around;
+            }
+            .tracking-steps::before {
+                display: none; /* Hide horizontal line */
+            }
+            .step-icon {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1rem;
+            }
+            .step-label {
+                font-size: 0.7rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-column p {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i>
+                    <h1>ورشة</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="services.html">الخدمات</a></li>
+                        <li><a href="technicians.html">فنيونا</a></li>
+                        <li><a href="my-orders.html" class="active">طلباتي</a></li>
+                        <li><a href="help.html">المساعدة</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h2>طلباتي</h2>
+            <ul class="breadcrumb">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li>طلباتي</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="dashboard-layout">
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-name">محمد أحمد</div>
+                    <div class="user-email">mohamed@example.com</div>
+                </div>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="fas fa-clipboard-list"></i> طلباتي</a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> الملف الشخصي</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> عناويني</a></li>
+                    <li><a href="#"><i class="fas fa-credit-card"></i> طرق الدفع</a></li>
+                    <li><a href="#"><i class="fas fa-heart"></i> المفضلة</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> المساعدة</a></li>
+                </ul>
+            </aside>
+            
+            <main class="orders-main-content">
+                <div class="orders-section-header">
+                    <h2>طلباتي السابقة</h2>
+                    <div class="orders-filter-group">
+                        <select class="filter-select">
+                            <option>فرز حسب التاريخ</option>
+                            <option>الأحدث</option>
+                            <option>الأقدم</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>جميع الخدمات</option>
+                            <option>كهرباء</option>
+                            <option>سباكة</option>
+                            <option>دهان</option>
+                            <option>نجارة</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="orders-tabs" id="orders-tabs">
+                    <div class="order-tab active" data-filter="all">الجميع <span class="order-tab-badge">5</span></div>
+                    <div class="order-tab" data-filter="pending">قيد الانتظار <span class="order-tab-badge">1</span></div>
+                    <div class="order-tab" data-filter="confirmed">تم التأكيد <span class="order-tab-badge">1</span></div>
+                    <div class="order-tab" data-filter="in-progress">قيد التنفيذ <span class="order-tab-badge">1</span></div>
+                    <div class="order-tab" data-filter="completed">مكتمل <span class="order-tab-badge">2</span></div>
+                    <div class="order-tab" data-filter="cancelled">ملغي <span class="order-tab-badge">0</span></div>
+                </div>
+                
+                <div class="orders-grid">
+                    <div class="order-card" data-status="in-progress">
+                        <div class="order-card-header">
+                            <div class="order-id">طلب #12345</div>
+                            <div class="order-date">15 نوفمبر 2023</div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-service-icon"><i class="fas fa-bolt"></i></div>
+                            <div class="order-details">
+                                <h3>إصلاح أعطال الكهرباء</h3>
+                                <p>إصلاح عطل في الكهرباء الرئيسية للمنزل واستبدال مفاتيح تالفة</p>
+                                <div class="order-technician">
+                                    <div class="technician-avatar"><i class="fas fa-user"></i></div>
+                                    <div class="technician-name">عماد السعدي</div>
+                                </div>
+                            </div>
+                            <div class="order-status-info">
+                                <span class="status-badge status-in-progress">قيد التنفيذ</span>
+                                <div class="order-price">75,000 ل.س</div>
+                            </div>
+                        </div>
+                        <div class="order-tracking-section">
+                            <div class="tracking-steps">
+                                <div class="tracking-step step-completed">
+                                    <div class="step-icon"><i class="fas fa-check"></i></div>
+                                    <div class="step-label">تم الطلب</div>
+                                </div>
+                                <div class="tracking-step step-completed">
+                                    <div class="step-icon"><i class="fas fa-check"></i></div>
+                                    <div class="step-label">تم التأكيد</div>
+                                </div>
+                                <div class="tracking-step step-active">
+                                    <div class="step-icon"><i class="fas fa-user-cog"></i></div>
+                                    <div class="step-label">قيد التنفيذ</div>
+                                </div>
+                                <div class="tracking-step">
+                                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                                    <div class="step-label">مكتمل</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-card-actions">
+                            <button class="action-btn action-btn-primary track-btn">تتبع الطلب</button>
+                            <button class="action-btn action-btn-secondary">التواصل مع الفني</button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-card" data-status="completed">
+                        <div class="order-card-header">
+                            <div class="order-id">طلب #12344</div>
+                            <div class="order-date">12 نوفمبر 2023</div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-service-icon"><i class="fas fa-faucet"></i></div>
+                            <div class="order-details">
+                                <h3>إصلاح تسرب المياه</h3>
+                                <p>إصلاح تسرب في الحمام الرئيسي واستبدال خلاط المياه</p>
+                                <div class="order-technician">
+                                    <div class="technician-avatar"><i class="fas fa-user"></i></div>
+                                    <div class="technician-name">سليم الحلبي</div>
+                                </div>
+                            </div>
+                            <div class="order-status-info">
+                                <span class="status-badge status-completed">مكتمل</span>
+                                <div class="order-price">65,000 ل.س</div>
+                            </div>
+                        </div>
+                        <div class="order-card-actions">
+                            <button class="action-btn action-btn-primary">تقييم الخدمة</button>
+                            <button class="action-btn action-btn-secondary">طلب خدمة مشابهة</button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-card" data-status="confirmed">
+                        <div class="order-card-header">
+                            <div class="order-id">طلب #12343</div>
+                            <div class="order-date">10 نوفمبر 2023</div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-service-icon"><i class="fas fa-paint-roller"></i></div>
+                            <div class="order-details">
+                                <h3>خدمة الدهان</h3>
+                                <p>دهان غرفة المعيشة بالكامل مع أعمال التحضير والتشطيب</p>
+                                <div class="order-technician">
+                                    <div class="technician-avatar"><i class="fas fa-user"></i></div>
+                                    <div class="technician-name">مازن الدغلي</div>
+                                </div>
+                            </div>
+                            <div class="order-status-info">
+                                <span class="status-badge status-confirmed">تم التأكيد</span>
+                                <div class="order-price">120,000 ل.س</div>
+                            </div>
+                        </div>
+                        <div class="order-card-actions">
+                            <button class="action-btn action-btn-primary">تعديل الموعد</button>
+                            <button class="action-btn action-btn-danger cancel-btn">إلغاء الطلب</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card" data-status="pending">
+                        <div class="order-card-header">
+                            <div class="order-id">طلب #12342</div>
+                            <div class="order-date">8 نوفمبر 2023</div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-service-icon"><i class="fas fa-wrench"></i></div>
+                            <div class="order-details">
+                                <h3>صيانة عامة للمنزل</h3>
+                                <p>خدمة صيانة دورية للمكيفات والأجهزة المنزلية</p>
+                                <div class="order-technician">
+                                    <div class="technician-avatar"><i class="fas fa-user"></i></div>
+                                    <div class="technician-name">فريق ورشة</div>
+                                </div>
+                            </div>
+                            <div class="order-status-info">
+                                <span class="status-badge status-pending">قيد الانتظار</span>
+                                <div class="order-price">50,000 ل.س</div>
+                            </div>
+                        </div>
+                        <div class="order-card-actions">
+                            <button class="action-btn action-btn-primary">التواصل مع الدعم</button>
+                            <button class="action-btn action-btn-danger cancel-btn">إلغاء الطلب</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card" data-status="completed">
+                        <div class="order-card-header">
+                            <div class="order-id">طلب #12341</div>
+                            <div class="order-date">1 نوفمبر 2023</div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-service-icon"><i class="fas fa-tv"></i></div>
+                            <div class="order-details">
+                                <h3>تثبيت شاشة تلفزيون</h3>
+                                <p>تثبيت شاشة تلفزيون على الحائط مع إخفاء الأسلاك</p>
+                                <div class="order-technician">
+                                    <div class="technician-avatar"><i class="fas fa-user"></i></div>
+                                    <div class="technician-name">سامر العمر</div>
+                                </div>
+                            </div>
+                            <div class="order-status-info">
+                                <span class="status-badge status-completed">مكتمل</span>
+                                <div class="order-price">25,000 ل.س</div>
+                            </div>
+                        </div>
+                        <div class="order-card-actions">
+                            <button class="action-btn action-btn-primary">تقييم الخدمة</button>
+                            <button class="action-btn action-btn-secondary">طلب خدمة مشابهة</button>
+                        </div>
+                    </div>
+
+                    <div class="empty-state hidden">
+                        <i class="fas fa-box-open"></i>
+                        <h3>لا يوجد طلبات</h3>
+                        <p>يبدو أنك لم تقم بتقديم أي طلبات حتى الآن. يمكنك استعراض خدماتنا وطلب الخدمة التي تحتاجها.</p>
+                        <a href="services.html" class="action-btn action-btn-primary" style="width: auto; display: inline-block;">استعراض الخدمات</a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-tools"></i>
+                        <h3>ورشة</h3>
+                    </div>
+                    <p>تطبيق ورشة يوفر لك أفضل الحرفيين والمهنيين لخدمات إصلاح المنازل بجودة عالية وضمان على العمل.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="انستجرام"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="لينكد ان"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                        <li><a href="services.html"><i class="fas fa-concierge-bell"></i> الخدمات</a></li>
+                        <li><a href="technicians.html"><i class="fas fa-users"></i> فنيونا</a></li>
+                        <li><a href="my-orders.html"><i class="fas fa-clipboard-list"></i> طلباتي</a></li>
+                        <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>خدماتنا</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-bolt"></i> خدمات الكهرباء</a></li>
+                        <li><a href="#"><i class="fas fa-faucet"></i> خدمات السباكة</a></li>
+                        <li><a href="#"><i class="fas fa-paint-roller"></i> خدمات الدهان</a></li>
+                        <li><a href="#"><i class="fas fa-hammer"></i> خدمات النجارة</a></li>
+                        <li><a href="#"><i class="fas fa-fan"></i> خدمات التكييف</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>اتصل بنا</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> دمشق، سوريا</li>
+                        <li><i class="fas fa-phone"></i> 963123456789+</li>
+                        <li><i class="fas fa-envelope"></i> info@warshaapp.com</li>
+                        <li><i class="fas fa-clock"></i> من الأحد إلى الخميس</li>
+                        <li><i class="fas fa-globe"></i> 8:00 ص - 6:00 م</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 ورشة. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderTabs = document.querySelectorAll('.order-tab');
+            const orderCards = document.querySelectorAll('.order-card');
+            const emptyState = document.querySelector('.empty-state');
+            const ordersGrid = document.querySelector('.orders-grid');
+            
+            // Function to filter orders based on status
+            const filterOrders = (filter) => {
+                let hasVisibleOrders = false;
+                orderCards.forEach(card => {
+                    const status = card.dataset.status;
+                    if (filter === 'all' || status === filter) {
+                        card.classList.remove('hidden');
+                        hasVisibleOrders = true;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                if (hasVisibleOrders) {
+                    emptyState.classList.add('hidden');
+                } else {
+                    emptyState.classList.remove('hidden');
+                }
+            };
+
+            // Event listeners for order tabs
+            orderTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    orderTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to the clicked tab
+                    tab.classList.add('active');
+                    const filter = tab.dataset.filter;
+                    filterOrders(filter); // Apply filter
+                });
+            });
+
+            // Event listener for actions within order cards (tracking, cancel)
+            ordersGrid.addEventListener('click', (e) => {
+                const trackBtn = e.target.closest('.track-btn');
+                if (trackBtn) {
+                    const orderCard = trackBtn.closest('.order-card');
+                    const trackingSection = orderCard.querySelector('.order-tracking-section');
+                    
+                    trackingSection.classList.toggle('active'); // Toggle active class for animation
+                    
+                    if (trackingSection.classList.contains('active')) {
+                        trackBtn.textContent = 'إخفاء التتبع';
+                    } else {
+                        trackBtn.textContent = 'تتبع الطلب';
+                    }
+                }
+
+                const cancelBtn = e.target.closest('.cancel-btn');
+                if (cancelBtn) {
+                    const orderId = cancelBtn.closest('.order-card').querySelector('.order-id').textContent;
+                    if (confirm(`هل أنت متأكد من رغبتك في إلغاء ${orderId}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+                        alert(`تم إلغاء الطلب: ${orderId}`);
+                        // In a real application, you would send an AJAX request to cancel the order
+                        // and then potentially remove the card or update its status.
+                    }
+                }
+            });
+
+            // Initial filter to show all orders when the page loads
+            filterOrders('all');
+        });
+    </script>
+</body>
+</html>

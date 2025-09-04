@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - الإعدادات والملف الشخصي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2D5B7A;
+            --secondary: #4F8A8B;
+            --accent: #FFCB74;
+            --light: #F8F5F0;
+            --dark: #2C3E50;
+            --success: #5CB85C;
+            --warning: #F0AD4E;
+            --danger: #D9534F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: #FFB74D;
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(45, 91, 122, 0.9), rgba(45, 91, 122, 0.85)), url('https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 10px;
+        }
+
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            margin: 0 10px;
+            font-size: 12px;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--light);
+            margin: 0 auto 15px;
+            overflow: hidden;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .user-email {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #555;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .sidebar-menu i {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-header h2 {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .settings-tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .settings-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            position: relative;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .settings-tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .settings-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* Profile Form */
+        .profile-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 91, 122, 0.1);
+            outline: none;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .input-icon .form-control {
+            padding-left: 45px;
+        }
+
+        /* Notifications Settings */
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e1e5eb;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .notification-info h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .notification-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .notification-toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .notification-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .notification-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .notification-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .notification-slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .notification-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Security Settings */
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e1e5eb;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .security-info h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .security-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Privacy Settings */
+        .privacy-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .privacy-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e1e5eb;
+            border-radius: 10px;
+        }
+
+        .privacy-option input {
+            margin-left: 10px;
+        }
+
+        .privacy-option label {
+            font-weight: 500;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.98)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs><pattern id="tools" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M20,20 L30,10 L40,20 L30,30 Z" fill="%23FFCB74" opacity="0.2"/><circle cx="70" cy="30" r="8" fill="%234F8A8B" opacity="0.2"/><rect x="60" cy="60" width="15" height="15" transform="translate(60 60) rotate(45)" fill="%232D5B7A" opacity="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(%23tools)"/></svg>');
+           /* background-size: 300px 300px;*/
+            background-position: center center;
+            color: white;
+            padding: 50px 0 25px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 203, 116, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(79, 138, 139, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 40% 80%, rgba(45, 91, 122, 0.15) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .footer-tools-icon {
+            position: absolute;
+            opacity: 0.07;
+            font-size: 200px;
+            color: var(--accent);
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .footer-column ul li:hover {
+            transform: translateX(-5px);
+        }
+
+        .footer-column ul li i {
+            margin-left: 10px;
+            color: var(--accent);
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-column a i {
+            margin-left: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 50%;
+        }
+
+        .social-links a:hover::before {
+            opacity: 1;
+        }
+
+        .social-links a i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: #bbb;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .tools-icons {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .tools-icons i {
+            position: absolute;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .tools-icons i:nth-child(1) { top: 15%; left: 10%; }
+        .tools-icons i:nth-child(2) { top: 25%; right: 15%; }
+        .tools-icons i:nth-child(3) { bottom: 30%; left: 20%; }
+        .tools-icons i:nth-child(4) { bottom: 15%; right: 25%; }
+        .tools-icons i:nth-child(5) { top: 40%; left: 30%; }
+        .tools-icons i:nth-child(6) { bottom: 40%; right: 10%; }
+        .tools-icons i:nth-child(7) { top: 10%; right: 30%; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            header{
+                position:relative;
+                width:100svw;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .settings-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .settings-tab {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i>
+                    <h1>ورشة</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="services.html">الخدمات</a></li>
+                        <li><a href="technicians.html">فنيونا</a></li>
+                        <li><a href="my-orders.html">طلباتي</a></li>
+                        <li><a href="profile.html" class="active">إعدادات</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">تسجيل الخروج</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h2>الإعدادات والملف الشخصي</h2>
+            <ul class="breadcrumb">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li>الإعدادات</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                        <div class="avatar-edit">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div class="user-name">محمد أحمد</div>
+                    <div class="user-email">mohamed@example.com</div>
+                </div>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="fas fa-user-circle"></i> الملف الشخصي</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> الإشعارات</a></li>
+                    <li><a href="#"><i class="fas fa-lock"></i> الأمان</a></li>
+                    <li><a href="#"><i class="fas fa-shield-alt"></i> الخصوصية</a></li>
+                    <li><a href="#"><i class="fas fa-credit-card"></i> طرق الدفع</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> العناوين</a></li>
+                    <li><a href="#"><i class="fas fa-language"></i> اللغة</a></li>
+                    <li><a href="#"><i class="fas fa-moon"></i> المظهر</a></li>
+                </ul>
+            </div>
+            
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h2>الملف الشخصي</h2>
+                    <button class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+                
+                <div class="settings-tabs">
+                    <div class="settings-tab active">المعلومات الشخصية</div>
+                    <div class="settings-tab">التفضيلات</div>
+                    <div class="settings-tab">الاشتراكات</div>
+                    <div class="settings-tab">التقييمات</div>
+                </div>
+                
+                <div class="profile-form">
+                    <div class="form-section">
+                        <h3>المعلومات الأساسية</h3>
+                        
+                        <div class="form-group">
+                            <label for="firstName">الاسم الأول</label>
+                            <input type="text" id="firstName" class="form-control" value="محمد" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">الاسم الأخير</label>
+                            <input type="text" id="lastName" class="form-control" value="أحمد" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">البريد الإلكتروني</label>
+                            <div class="input-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" class="form-control" value="mohamed@example.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">رقم الهاتف</label>
+                            <div class="input-icon">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="phone" class="form-control" value="963123456789+" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>معلومات إضافية</h3>
+                        
+                        <div class="form-group">
+                            <label for="birthdate">تاريخ الميلاد</label>
+                            <input type="date" id="birthdate" class="form-control" value="1990-01-15">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="city">المدينة</label>
+                            <select id="city" class="form-control" required>
+                                <option value="damascus">دمشق</option>
+                                <option value="aleppo" selected>حلب</option>
+                                <option value="homs">حمص</option>
+                                <option value="latakia">اللاذقية</option>
+                                <option value="hama">حماة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">العنوان</label>
+                            <textarea id="address" class="form-control" rows="3">شارع الجمهورية، بناء رقم 15</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>إشعارات البريد الإلكتروني</h3>
+                    
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h4>الإشعارات العامة</h4>
+                            <p>استقبل آخر الأخبار والتحديثات من ورشة</p>
+                        </div>
+                        <label class="notification-toggle">
+                            <input type="checkbox" checked>
+                            <span class="notification-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h4>عروض خاصة</h4>
+                            <p>استقبل العروض والخصومات الحصرية</p>
+                        </div>
+                        <label class="notification-toggle">
+                            <input type="checkbox" checked>
+                            <span class="notification-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h4>تحديثات الطلبات</h4>
+                            <p>إشعارات حول حالة طلباتك الحالية</p>
+                        </div>
+                        <label class="notification-toggle">
+                            <input type="checkbox" checked>
+                            <span class="notification-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h4>نشرات إخبارية</h4>
+                            <p>استقبل النشرات الإخبارية الدورية</p>
+                        </div>
+                        <label class="notification-toggle">
+                            <input type="checkbox">
+                            <span class="notification-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>إعدادات الأمان</h3>
+                    
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>كلمة المرور</h4>
+                            <p>آخر تحديث: منذ 3 أشهر</p>
+                        </div>
+                        <button class="btn btn-outline" style="color: var(--dark); border-color: #ddd;">تغيير</button>
+                    </div>
+                    
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>المصادقة الثنائية</h4>
+                            <p>غير مفعلة - إضافة طبقة أمان إضافية</p>
+                        </div>
+                        <button class="btn btn-outline" style="color: var(--dark); border-color: #ddd;">تفعيل</button>
+                    </div>
+                    
+                    <div class="security-item">
+                        <div class="security-info">
+                            <h4>أجهزة متصلة</h4>
+                            <p>3 أجهزة متصلة بحسابك</p>
+                        </div>
+                        <button class="btn btn-outline" style="color: var(--dark); border-color: #ddd;">إدارة</button>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>إعدادات الخصوصية</h3>
+                    
+                    <div class="privacy-options">
+                        <div class="privacy-option">
+                            <input type="radio" id="privacy-public" name="privacy" checked>
+                            <label for="privacy-public">ملف تعريفي عام (يمكن للجميع رؤية معلوماتك)</label>
+                        </div>
+                        
+                        <div class="privacy-option">
+                            <input type="radio" id="privacy-private" name="privacy">
+                            <label for="privacy-private">ملف تعريفي خاص (إخفاء معلوماتك عن الآخرين)</label>
+                        </div>
+                        
+                        <div class="privacy-option">
+                            <input type="checkbox" id="show-ratings" checked>
+                            <label for="show-ratings">السماح للآخرين برؤية تقييماتي</label>
+                        </div>
+                        
+                        <div class="privacy-option">
+                            <input type="checkbox" id="show-activity" checked>
+                            <label for="show-activity">السماح للآخرين برؤية نشاطي</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <i class="fas fa-tools footer-tools-icon"></i>
+        
+        <div class="tools-icons">
+            <i class="fas fa-wrench"></i>
+            <i class="fas fa-screwdriver"></i>
+            <i class="fas fa-hammer"></i>
+            <i class="fas fa-bolt"></i>
+            <i class="fas fa-paint-roller"></i>
+            <i class="fas fa-toolbox"></i>
+            <i class="fas fa-tape"></i>
+        </div>
+
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-tools"></i>
+                        <h3>ورشة</h3>
+                    </div>
+                    <p>تطبيق ورشة يوفر لك أفضل الحرفيين والمهنيين لخدمات إصلاح المنازل بجودة عالية وضمان على العمل.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                        <li><a href="services.html"><i class="fas fa-concierge-bell"></i> الخدمات</a></li>
+                        <li><a href="technicians.html"><i class="fas fa-users"></i> فنيونا</a></li>
+                        <li><a href="my-orders.html"><i class="fas fa-clipboard-list"></i> طلباتي</a></li>
+                        <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>خدماتنا</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-bolt"></i> خدمات الكهرباء</a></li>
+                        <li><a href="#"><i class="fas fa-faucet"></i> خدمات السباكة</a></li>
+                        <li><a href="#"><i class="fas fa-paint-roller"></i> خدمات الدهان</a></li>
+                        <li><a href="#"><i class="fas fa-hammer"></i> خدمات النجارة</a></li>
+                        <li><a href="#"><i class="fas fa-fan"></i> خدمات التكييف</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>اتصل بنا</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> دمشق، سوريا</li>
+                        <li><i class="fas fa-phone"></i> 963123456789+</li>
+                        <li><i class="fas fa-envelope"></i> info@warshaapp.com</li>
+                        <li><i class="fas fa-clock"></i> من الأحد إلى الخميس</li>
+                        <li><i class="fas fa-globe"></i> 8:00 ص - 6:00 م</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 ورشة. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تفعيل تبويبات الإعدادات
+            const settingsTabs = document.querySelectorAll('.settings-tab');
+            
+            settingsTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    settingsTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // في تطبيق حقيقي، هنا سيتم تحميل المحتوى المناسب لكل تبويب
+                    const tabName = this.textContent.trim();
+                    console.log('تم اختيار التبويب: ' + tabName);
+                });
+            });
+            
+            // تفعيل زر حفظ التغييرات
+            const saveButton = document.querySelector('.settings-header .btn');
+            
+            saveButton.addEventListener('click', function() {
+                const originalText = this.textContent;
+                
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+                this.disabled = true;
+                
+                // محاكاة عملية الحفظ
+                setTimeout(() => {
+                    alert('تم حفظ التغييرات بنجاح!');
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }, 1500);
+            });
+            
+            // تفعيل زر تغيير صورة الملف الشخصي
+            const avatarEdit = document.querySelector('.avatar-edit');
+            
+            avatarEdit.addEventListener('click', function() {
+                alert('فتح خيارات تحميل صورة الملف الشخصي');
+            });
+            
+            // تفعيل أزرار الأمان
+            const securityButtons = document.querySelectorAll('.security-item .btn');
+            
+            securityButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const securityAction = this.closest('.security-item').querySelector('h4').textContent;
+                    alert(`جاري فتح نافذة ${securityAction}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
