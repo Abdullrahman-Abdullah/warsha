@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - تفاصيل الخدمة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #2D5B7A;
+            --secondary: #4F8A8B;
+            --accent: #FFCB74;
+            --light: #F8F5F0;
+            --dark: #2C3E50;
+            --success: #5CB85C;
+            --warning: #F0AD4E;
+            --danger: #D9534F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: #FFB74D;
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(45, 91, 122, 0.9), rgba(45, 91, 122, 0.85)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 10px;
+        }
+
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            margin: 0 10px;
+            font-size: 12px;
+        }
+
+        /* Service Detail Section */
+        .service-detail {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .service-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-info h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .service-info img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .service-description {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .service-features {
+            margin-bottom: 30px;
+        }
+
+        .service-features h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list i {
+            color: var(--success);
+            margin-left: 15px;
+            font-size: 18px;
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 100px;
+        }
+
+        .booking-form h3 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+
+
+.loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary);
+        }
+        
+        .loading i {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            background: var(--danger);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 91, 122, 0.1);
+            outline: none;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .input-icon .form-control {
+            padding-left: 45px;
+        }
+
+        .booking-price {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .price-note {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Reviews Section */
+        .reviews {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 60px;
+        }
+
+        .reviews h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .review-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .review-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .review-rating {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Related Services */
+        .related-services {
+            margin-bottom: 60px;
+        }
+
+        .related-services h2 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            background: var(--light);
+            padding: 30px 0;
+            font-size: 50px;
+            color: var(--primary);
+        }
+
+        .service-content {
+            padding: 25px;
+        }
+
+        .service-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .service-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.98)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs><pattern id="tools" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M20,20 L30,10 L40,20 L30,30 Z" fill="%23FFCB74" opacity="0.2"/><circle cx="70" cy="30" r="8" fill="%234F8A8B" opacity="0.2"/><rect x="60" cy="60" width="15" height="15" transform="translate(60 60) rotate(45)" fill="%232D5B7A" opacity="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(%23tools)"/></svg>');
+           /* background-size: 300px 300px;*/
+            background-position: center center;
+            color: white;
+            padding: 50px 0 25px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 203, 116, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(79, 138, 139, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 40% 80%, rgba(45, 91, 122, 0.15) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .footer-tools-icon {
+            position: absolute;
+            opacity: 0.07;
+            font-size: 200px;
+            color: var(--accent);
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .footer-column ul li:hover {
+            transform: translateX(-5px);
+        }
+
+        .footer-column ul li i {
+            margin-left: 10px;
+            color: var(--accent);
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-column a i {
+            margin-left: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 50%;
+        }
+
+        .social-links a:hover::before {
+            opacity: 1;
+        }
+
+        .social-links a i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: #bbb;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .tools-icons {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .tools-icons i {
+            position: absolute;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .tools-icons i:nth-child(1) { top: 15%; left: 10%; }
+        .tools-icons i:nth-child(2) { top: 25%; right: 15%; }
+        .tools-icons i:nth-child(3) { bottom: 30%; left: 20%; }
+        .tools-icons i:nth-child(4) { bottom: 15%; right: 25%; }
+        .tools-icons i:nth-child(5) { top: 40%; left: 30%; }
+        .tools-icons i:nth-child(6) { bottom: 40%; right: 10%; }
+        .tools-icons i:nth-child(7) { top: 10%; right: 30%; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .service-detail {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-form {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            header{
+                position:relative;
+                width:100svw;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .review-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i>
+                    <h1>ورشة</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="services.html">الخدمات</a></li>
+                        <li><a href="technicians.html">فنيونا</a></li>
+                        <li><a href="my-orders.html">طلباتي</a></li>
+                        <li><a href="help.html">المساعدة</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h2 id="serviceTitle">تفاصيل الخدمة</h2>
+            <ul class="breadcrumb">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li><a href="services.html">الخدمات</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li id="breadcrumbService">الخدمة</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Service Detail Section -->
+    <section class="container">
+        <div id="serviceContainer">
+            <!-- سيتم ملؤها ديناميكياً -->
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>جاري تحميل بيانات الخدمة...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <!-- <footer>
+        نفس الفوتر السابق
+        <i class="fas fa-tools footer-tools-icon"></i>
+        
+        <div class="tools-icons">
+            <i class="fas fa-wrench"></i>
+            <i class="fas fa-screwdriver"></i>
+            <i class="fas fa-hammer"></i>
+            <i class="fas fa-bolt"></i>
+            <i class="fas fa-paint-roller"></i>
+            <i class="fas fa-toolbox"></i>
+            <i class="fas fa-tape"></i>
+        </div>
+    
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-tools"></i>
+                        <h3>ورشة</h3>
+                    </div>
+                    <p>تطبيق ورشة يوفر لك أفضل الحرفيين والمهنيين لخدمات إصلاح المنازل بجودة عالية وضمان على العمل.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                        <li><a href="services.html"><i class="fas fa-concierge-bell"></i> الخدمات</a></li>
+                        <li><a href="how-it-works.html"><i class="fas fa-question-circle"></i> كيف تعمل</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> حولنا</a></li>
+                        <li><a href="contact.html"><i class="fas fa-phone"></i> اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>خدماتنا</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-bolt"></i> خدمات الكهرباء</a></li>
+                        <li><a href="#"><i class="fas fa-faucet"></i> خدمات السباكة</a></li>
+                        <li><a href="#"><i class="fas fa-paint-roller"></i> خدمات الدهان</a></li>
+                        <li><a href="#"><i class="fas fa-hammer"></i> خدمات النجارة</a></li>
+                        <li><a href="#"><i class="fas fa-fan"></i> خدمات التكييف</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>اتصل بنا</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> دمشق، سوريا</li>
+                        <li><i class="fas fa-phone"></i> 963123456789+</li>
+                        <li><i class="fas fa-envelope"></i> info@warshaapp.com</li>
+                        <li><i class="fas fa-clock"></i> من الأحد إلى الخميس</li>
+                        <li><i class="fas fa-globe"></i> 8:00 ص - 6:00 م</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 ورشة. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer> -->
+
+   <script>
+    // تكوين Supabase
+    const SUPABASE_URL = 'https://pfywzbdhnxybgxesptgj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmeXd6YmRobnh5Ymd4ZXNwdGdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjU5MTgsImV4cCI6MjA3NzI0MTkxOH0.a4l-_A_TcwfEhJy7Xuly1KMUS4KFhiOOjXbByYtDbek';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // متغيرات عامة
+    let currentService = null;
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializePage();
+    });
+
+    // تهيئة الصفحة
+    async function initializePage() {
+        try {
+            // التحقق من تسجيل الدخول
+            await checkAuthentication();
+            
+            // تحميل بيانات الخدمة
+            await loadServiceData();
+            
+            // تحميل بيانات المستخدم
+            await loadUserData();
+            
+            // ملء بيانات المستخدم تلقائياً في النموذج
+            populateUserForm();
+            
+        } catch (error) {
+            console.error('Error initializing page:', error);
+            showError('حدث خطأ في تحميل الصفحة: ' + error.message);
+        }
+    }
+
+    // التحقق من تسجيل الدخول
+    async function checkAuthentication() {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+            throw new Error('خطأ في التحقق من الجلسة: ' + error.message);
+        }
+        
+        if (!session) {
+            alert('يجب تسجيل الدخول أولاً لطلب الخدمة');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        currentUser = session.user;
+        return true;
+    }
+
+    // تحميل بيانات المستخدم
+    // تحميل بيانات المستخدم
+async function loadUserData() {
+    if (!currentUser) return null;
+
+    const { data: customer, error } = await supabase
+        .from('customers')
+        .select('id, first_name, last_name, phone_number, address, email')
+        .eq('email', currentUser.email)
+        .single();
+
+    if (error) {
+        console.error('Error fetching customer data:', error);
+        
+        // إذا لم يتم العثور على العميل، إنشاء سجل جديد
+        return await createCustomerRecord();
+    }
+
+    return customer;
+}
+
+    // تحميل بيانات الخدمة
+    async function loadServiceData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId = urlParams.get('service');
+        
+        if (!serviceId) {
+            throw new Error('لم يتم تحديد خدمة');
+        }
+
+        const { data: service, error } = await supabase
+            .from('services')
+            .select('*')
+            .eq('id', serviceId)
+            .single();
+
+        if (error) throw error;
+        if (!service) throw new Error('الخدمة غير موجودة');
+
+        currentService = service;
+        displayServiceData(service);
+        loadRelatedServices(serviceId);
+
+        return service;
+    }
+
+    // عرض بيانات الخدمة
+    function displayServiceData(service) {
+        // تحديث العناوين
+        document.getElementById('serviceTitle').textContent = service.service_name;
+        document.getElementById('breadcrumbService').textContent = service.service_name;
+
+        // إنشاء محتوى الخدمة
+        const serviceContainer = document.getElementById('serviceContainer');
+        serviceContainer.innerHTML = createServiceHTML(service);
+
+        // تفعيل نموذج الحجز
+        document.getElementById('bookingForm').addEventListener('submit', handleBookingSubmit);
+    }
+
+    // إنشاء HTML للخدمة
+    function createServiceHTML(service) {
+        return `
+            <div class="service-detail">
+                <div class="service-info">
+                    <h2>${service.service_name}</h2>
+                    <img src="${service.image_url || 'https://images.unsplash.com/photo-1585730061512-300e343a3565?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'}" 
+                         alt="${service.service_name}">
+                    
+                    <div class="service-description">
+                        <p>${service.description || 'لا يوجد وصف متوفر للخدمة'}</p>
+                    </div>
+                    
+                    <div class="service-features">
+                        <h3>مميزات الخدمة</h3>
+                        <ul class="feature-list">
+                            ${generateFeaturesHTML(service)}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="booking-form">
+                    <h3>احجز خدمتك الآن</h3>
+                    <form id="bookingForm">
+                        ${createBookingFormHTML()}
+                    </form>
+                </div>
+            </div>
+            
+            <!-- تقييمات العملاء -->
+            <div class="reviews">
+                <h2>تقييمات العملاء</h2>
+                <div id="reviewsContainer">
+                    ${generateReviewsHTML(service)}
+                </div>
+            </div>
+            
+            <!-- خدمات ذات صلة -->
+            <div class="related-services">
+                <h2>خدمات ذات صلة</h2>
+                <div class="services-grid" id="relatedServices">
+                    <!-- سيتم ملؤها ديناميكياً -->
+                </div>
+            </div>
+        `;
+    }
+
+    // إنشاء قائمة المميزات
+    function generateFeaturesHTML(service) {
+        if (service.features && Array.isArray(service.features)) {
+            return service.features.map(feature => 
+                `<li><i class="fas fa-check-circle"></i> ${feature}</li>`
+            ).join('');
+        }
+        return `
+            <li><i class="fas fa-check-circle"></i> خدمة سريعة ومضمونة</li>
+            <li><i class="fas fa-check-circle"></i> فنيون محترفون</li>
+            <li><i class="fas fa-check-circle"></i> أسعار تنافسية</li>
+            <li><i class="fas fa-check-circle"></i> ضمان على العمل</li>
+        `;
+    }
+
+    // إنشاء نموذج الحجز
+    function createBookingFormHTML() {
+        return `
+            <div class="form-group">
+                <label for="name">الاسم الكامل</label>
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="name" class="form-control" placeholder="أدخل اسمك الكامل" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <div class="input-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="phone" class="form-control" placeholder="963123456789+" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">العنوان</label>
+                <div class="input-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="address" class="form-control" placeholder="أدخل عنوانك بالتفصيل" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">التاريخ المفضل</label>
+                <div class="input-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="date" id="date" class="form-control" required min="${getTomorrowDate()}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="time">الوقت المفضل</label>
+                <div class="input-icon">
+                    <i class="fas fa-clock"></i>
+                    <select id="time" class="form-control" required>
+                        <option value="">اختر الوقت المناسب</option>
+                        <option value="8:00-10:00">8:00 ص - 10:00 ص</option>
+                        <option value="10:00-12:00">10:00 ص - 12:00 م</option>
+                        <option value="12:00-14:00">12:00 م - 2:00 م</option>
+                        <option value="14:00-16:00">2:00 م - 4:00 م</option>
+                        <option value="16:00-18:00">4:00 م - 6:00 م</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="serviceType">نوع الخدمة</label>
+                <select id="serviceType" class="form-control" required>
+                    <option value="">اختر نوع الخدمة</option>
+                    ${generateServiceTypesHTML()}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">ملاحظات إضافية</label>
+                <textarea id="notes" class="form-control" rows="3" placeholder="أي تفاصيل إضافية عن الخدمة المطلوبة"></textarea>
+            </div>
+            
+            <div class="booking-price">
+                <div class="price">${currentService.base_price} ل.س</div>
+                <div class="price-note">السعر يبدأ من * قد يختلف حسب طبيعة العمل</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;">
+                احجز الخدمة الآن
+            </button>
+        `;
+    }
+
+    // إنشاء أنواع الخدمات
+    function generateServiceTypesHTML() {
+        if (currentService.service_types && Array.isArray(currentService.service_types)) {
+            return currentService.service_types.map(type => 
+                `<option value="${type}">${type}</option>`
+            ).join('');
+        }
+        
+        const defaultTypes = {
+            'كهرباء': ['تركيب مضخة', 'إصلاح دائرة كهربائية', 'تركيب مروحة سقف', 'إصلاح مفتاح'],
+            'سباكة': ['إصلاح تسريب', 'تركيب حنفية', 'تنظيف مجاري', 'تركيب سخان'],
+            'دهان': ['دهان غرفة', 'دهان شقة', 'دهان خارجي', 'إصلاح تشققات'],
+            'نجارة': ['تركيب باب', 'إصلاح نافذة', 'صنع دولاب', 'إصلاح أثاث']
+        };
+
+        const serviceName = currentService.service_name;
+        for (const [key, types] of Object.entries(defaultTypes)) {
+            if (serviceName.includes(key)) {
+                return types.map(type => `<option value="${type}">${type}</option>`).join('');
+            }
+        }
+
+        return '<option value="الخدمة الأساسية">الخدمة الأساسية</option>';
+    }
+
+    // إنشاء التقييمات
+    function generateReviewsHTML(service) {
+        if (service.reviews && Array.isArray(service.reviews)) {
+            return service.reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-header">
+                            <div class="reviewer-name">${review.name}</div>
+                            <div class="review-date">${review.date}</div>
+                        </div>
+                        <div class="review-rating">
+                            ${generateStarsHTML(review.rating)}
+                        </div>
+                        <div class="review-text">${review.text}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // تقييمات افتراضية
+        const defaultReviews = [
+            { name: 'أحمد محمد', date: '2024-01-15', rating: 5, text: 'خدمة ممتازة وسريعة، الفني كان محترفاً جداً' },
+            { name: 'فاطمة علي', date: '2024-01-10', rating: 4, text: 'جيدة جداً، لكن التأخير كان بسيطاً' },
+            { name: 'خالد حسن', date: '2024-01-08', rating: 5, text: 'أسعار معقولة وجودة عالية، شكراً لكم' }
+        ];
+
+        return defaultReviews.map(review => `
+            <div class="review-item">
+                <div class="review-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="review-content">
+                    <div class="review-header">
+                        <div class="reviewer-name">${review.name}</div>
+                        <div class="review-date">${review.date}</div>
+                    </div>
+                    <div class="review-rating">
+                        ${generateStarsHTML(review.rating)}
+                    </div>
+                    <div class="review-text">${review.text}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // إنشاء النجوم للتقييم
+    function generateStarsHTML(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<i class="fas fa-star"></i>';
+            } else if (i - 0.5 === rating) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            } else {
+                stars += '<i class="far fa-star"></i>';
+            }
+        }
+        return stars;
+    }
+
+    // الحصول على تاريخ الغد
+    function getTomorrowDate() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow.toISOString().split('T')[0];
+    }
+
+    // ملء بيانات المستخدم في النموذج
+    // ملء بيانات المستخدم في النموذج
+async function populateUserForm() {
+    const customer = await loadUserData();
+    if (!customer) return;
+
+    const nameField = document.getElementById('name');
+    const phoneField = document.getElementById('phone');
+    const addressField = document.getElementById('address');
+
+    if (nameField && !nameField.value) {
+        const fullName = `${customer.first_name} ${customer.last_name || ''}`.trim();
+        nameField.value = fullName;
+    }
+
+    if (phoneField && !phoneField.value && customer.phone_number) {
+        phoneField.value = customer.phone_number;
+    }
+
+    if (addressField && !addressField.value && customer.address) {
+        addressField.value = customer.address;
+    }
+}
+
+    // معالجة تقديم نموذج الحجز
+    // معالجة تقديم نموذج الحجز
+// معالجة تقديم نموذج الحجز
+async function handleBookingSubmit(e) {
+    e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحجز...';
+    submitBtn.disabled = true;
+
+    try {
+        if (!currentUser) {
+            throw new Error('يجب تسجيل الدخول أولاً');
+        }
+
+        if (!currentService) {
+            throw new Error('الخدمة غير محددة');
+        }
+
+        // جلب بيانات العميل
+        const customerData = await getCustomerData();
+        if (!customerData) {
+            throw new Error('لم يتم العثور على بيانات العميل');
+        }
+
+        const formData = {
+            customer_name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            preferred_date: document.getElementById('date').value,
+            preferred_time: document.getElementById('time').value,
+            service_type: document.getElementById('serviceType').value,
+            notes: document.getElementById('notes').value,
+            service_id: currentService.id,
+            service_name: currentService.service_name,
+            price: currentService.base_price,
+            status: 'pending',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // استخدام UUID من authentication كـ customer_id
+            customer_id: currentUser.id
+        };
+
+        // التحقق من صحة البيانات
+        validateFormData(formData);
+
+        console.log('بيانات الحجز المرسلة:', formData);
+
+        // حفظ الحجز في Supabase
+        const { data, error } = await supabase
+            .from('appointments')
+            .insert([formData])
+            .select();
+
+        if (error) {
+            console.error('Supabase error details:', error);
+            throw new Error('خطأ في حفظ الحجز: ' + error.message);
+        }
+
+        console.log('تم إنشاء الحجز بنجاح:', data);
+
+        alert('✅ تم حجز الخدمة بنجاح! سيتصل بك فريقنا خلال دقائق لتأكيد الموعد.');
+        
+        // توجيه المستخدم إلى صفحة الطلبات بعد الحجز
+        setTimeout(() => {
+            window.location.href = 'my-orders.html';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Error submitting booking:', error);
+        alert('❌ حدث خطأ أثناء الحجز: ' + error.message);
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
+// جلب بيانات العميل
+async function getCustomerData() {
+    if (!currentUser) return null;
+
+    const { data: customer, error } = await supabase
+        .from('customers')
+        .select('id, first_name, last_name, phone_number')
+        .eq('email', currentUser.email)
+        .single();
+
+    if (error) {
+        console.error('Error fetching customer data:', error);
+        return await createCustomerRecord();
+    }
+
+    return customer;
+}
+
+// الحصول على customer_id الصحيح من جدول customers
+async function getCustomerId() {
+    if (!currentUser) return null;
+
+    const { data: customer, error } = await supabase
+        .from('customers')
+        .select('id, first_name, last_name, phone_number')
+        .eq('email', currentUser.email)
+        .single();
+
+    if (error) {
+        console.error('Error fetching customer ID:', error);
+        
+        // إذا لم يتم العثور على العميل، إنشاء سجل جديد
+        return await createCustomerRecord();
+    }
+
+    return customer;
+}
+
+// إنشاء سجل جديد في جدول customers إذا لم يكن موجوداً
+async function createCustomerRecord() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+
+    if (!name || !phone) {
+        throw new Error('الاسم ورقم الهاتف مطلوبان لإنشاء سجل العميل');
+    }
+
+    const [firstName, ...lastNameParts] = name.split(' ');
+    const lastName = lastNameParts.join(' ');
+
+    const { data: customer, error } = await supabase
+        .from('customers')
+        .insert([
+            {
+                first_name: firstName,
+                last_name: lastName || '',
+                phone_number: phone,
+                email: currentUser.email,
+                address: address,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            }
+        ])
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error creating customer record:', error);
+        throw new Error('فشل في إنشاء سجل العميل: ' + error.message);
+    }
+
+    console.log('تم إنشاء سجل عميل جديد:', customer);
+    return customer;
+}
+
+    // التحقق من صحة بيانات النموذج
+    // التحقق من صحة بيانات النموذج
+function validateFormData(formData) {
+    console.log('التحقق من البيانات:', formData);
+    
+    const requiredFields = ['customer_name', 'phone', 'address', 'preferred_date', 'preferred_time', 'service_type'];
+    const missingFields = [];
+    
+    for (const field of requiredFields) {
+        if (!formData[field] || formData[field].toString().trim() === '') {
+            missingFields.push(field);
+        }
+    
+    
+    if (missingFields.length > 0) {
+        console.error('الحقول المفقودة:', missingFields);
+        throw new Error(`الحقول التالية مطلوبة: ${missingFields.join(', ')}`);
+    }
+
+    // التحقق من تاريخ المستقبل
+    const selectedDate = new Date(formData.preferred_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+        throw new Error('يجب اختيار تاريخ في المستقبل');
+    }
+
+    console.log('✅ جميع البيانات صحيحة');
+}
+
+        // التحقق من تاريخ المستقبل
+        const selectedDate = new Date(formData.appointment_date);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+
+        if (selectedDate < tomorrow) {
+            throw new Error('يجب اختيار تاريخ في المستقبل');
+        }
+    }
+
+    // تحميل الخدمات ذات الصلة
+    async function loadRelatedServices(currentServiceId) {
+        try {
+            const { data: services, error } = await supabase
+                .from('services')
+                .select('*')
+                .neq('id', currentServiceId)
+                .limit(3);
+
+            if (error) throw error;
+
+            const relatedServicesContainer = document.getElementById('relatedServices');
+            
+            if (services && services.length > 0) {
+                relatedServicesContainer.innerHTML = services.map(service => 
+                    createServiceCardHTML(service)
+                ).join('');
+            } else {
+                relatedServicesContainer.innerHTML = '<p>لا توجد خدمات ذات صلة متاحة</p>';
+            }
+        } catch (error) {
+            console.error('Error loading related services:', error);
+            document.getElementById('relatedServices').innerHTML = '<p>حدث خطأ في تحميل الخدمات ذات الصلة</p>';
+        }
+    }
+
+    // إنشاء بطاقة خدمة
+    function createServiceCardHTML(service) {
+        const icons = {
+            'كهرباء': 'fas fa-bolt',
+            'سباكة': 'fas fa-faucet',
+            'دهان': 'fas fa-paint-roller',
+            'نجارة': 'fas fa-hammer',
+            'تكييف': 'fas fa-fan',
+            'default': 'fas fa-tools'
+        };
+
+        const serviceName = service.service_name;
+        let icon = icons.default;
+
+        for (const [key, value] of Object.entries(icons)) {
+            if (serviceName.includes(key)) {
+                icon = value;
+                break;
+            }
+        }
+
+        return `
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="service-content">
+                    <h3>${service.service_name}</h3>
+                    <p>${service.description?.substring(0, 100) || 'خدمة متخصصة بجودة عالية'}...</p>
+                    <div class="service-price">${service.base_price} ل.س</div>
+                    <button class="btn btn-primary" onclick="viewService(${service.id})">
+                        اطلب الخدمة
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    // عرض خدمة محددة
+    function viewService(serviceId) {
+        window.location.href = `book-service.html?service=${serviceId}`;
+    }
+
+    // عرض رسالة خطأ
+    function showError(message) {
+        const serviceContainer = document.getElementById('serviceContainer');
+        serviceContainer.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>خطأ في التحميل</h3>
+                <p>${message}</p>
+                <button onclick="window.location.href='services.html'" class="btn btn-primary" style="margin-top: 15px;">
+                    العودة إلى الخدمات
+                </button>
+            </div>
+        `;
+    }
+
+    // جعل الدوال متاحة globally للاستدعاء من HTML
+    window.viewService = viewService;
+</script>
+</body>
+</html>
+
+

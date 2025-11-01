@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - خدماتنا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #2D5B7A;
+            --secondary: #4F8A8B;
+            --accent: #FFCB74;
+            --light: #F8F5F0;
+            --dark: #2C3E50;
+            --success: #5CB85C;
+            --warning: #F0AD4E;
+            --danger: #D9534F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: #FFB74D;
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(45, 91, 122, 0.9), rgba(45, 91, 122, 0.85)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 10px;
+        }
+
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            margin: 0 10px;
+            font-size: 12px;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 50px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 2;
+        }
+
+        .service-icon {
+            background: var(--light);
+            padding: 30px 0;
+            font-size: 50px;
+            color: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-icon::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(45, 91, 122, 0.1) 0%, rgba(79, 138, 139, 0.1) 100%);
+        }
+
+        .service-content {
+            padding: 25px;
+        }
+
+        .service-content h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .service-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-bottom: 25px;
+            text-align: right;
+        }
+
+        .service-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-features i {
+            color: var(--success);
+            margin-left: 10px;
+        }
+
+        .service-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .service-price span {
+            font-size: 16px;
+            font-weight: 400;
+            color: #666;
+        }
+
+        /* How it Works */
+        .how-it-works {
+            background: var(--light);
+            padding: 80px 0;
+            margin: 80px 0;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -10%;
+            width: 20%;
+            height: 2px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-size: 30px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 15px;
+            margin: 80px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(rgba(44, 62, 80, 0.95), rgba(44, 62, 80, 0.98)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs><pattern id="tools" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M20,20 L30,10 L40,20 L30,30 Z" fill="%23FFCB74" opacity="0.2"/><circle cx="70" cy="30" r="8" fill="%234F8A8B" opacity="0.2"/><rect x="60" cy="60" width="15" height="15" transform="translate(60 60) rotate(45)" fill="%232D5B7A" opacity="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(%23tools)"/></svg>');
+          /*  background-size: 300px 300px;*/
+            background-position: center center;
+            color: white;
+            padding: 50px 0 25px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 203, 116, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(79, 138, 139, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 40% 80%, rgba(45, 91, 122, 0.15) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .footer-tools-icon {
+            position: absolute;
+            opacity: 0.07;
+            font-size: 200px;
+            color: var(--accent);
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .footer-column ul li:hover {
+            transform: translateX(-5px);
+        }
+
+        .footer-column ul li i {
+            margin-left: 10px;
+            color: var(--accent);
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-column a i {
+            margin-left: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border-radius: 50%;
+        }
+
+        .social-links a:hover::before {
+            opacity: 1;
+        }
+
+        .social-links a i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: #bbb;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .tools-icons {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .tools-icons i {
+            position: absolute;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .tools-icons i:nth-child(1) { top: 15%; left: 10%; }
+        .tools-icons i:nth-child(2) { top: 25%; right: 15%; }
+        .tools-icons i:nth-child(3) { bottom: 30%; left: 20%; }
+        .tools-icons i:nth-child(4) { bottom: 15%; right: 25%; }
+        .tools-icons i:nth-child(5) { top: 40%; left: 30%; }
+        .tools-icons i:nth-child(6) { bottom: 40%; right: 10%; }
+        .tools-icons i:nth-child(7) { top: 10%; right: 30%; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+          header{
+            position:relative;
+            width:100svw;
+          }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .step:not(:last-child):after {
+                display: none;
+            }
+            
+            .step {
+                margin-bottom: 40px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i>
+                    <h1>ورشة</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="services.html">الخدمات</a></li>
+                        <li><a href="technicians.html">فنيونا</a></li>
+                        <li><a href="my-orders.html">طلباتي</a></li>
+                        <li><a href="help.html" >المساعدة</a></li>
+                    </ul>
+                </nav>
+               
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h2>خدماتنا</h2>
+            <ul class="breadcrumb">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li>خدماتنا</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>خدمات الصيانة المنزلية</h2>
+                <p>نوفر لك مجموعة متكاملة من خدمات الصيانة والإصلاح المنزلي بأعلى جودة وأفضل الأسعار</p>
+            </div>
+            <div class="services-grid">
+               
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>كيفية طلب الخدمة</h2>
+                <p>خطوات بسيطة للحصول على خدمة متميزة من ورشة</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>اختر الخدمة</h3>
+                    <p>اختر من بين خدماتنا المتعددة ما يناسب احتياجك</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>حدد الموعد</h3>
+                    <p>اختر الوقت واليوم المناسبين لزيارة الفني</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>احصل على الخدمة</h3>
+                    <p>يأتي الفني في الموعد المحدد ويقدم الخدمة باحترافية</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>ادفع بسهولة</h3>
+                    <p>ادفع بطرق متعددة بعد استلام الخدمة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+   
+   
+   <script type="module">
+     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+// إعدادات Supabase مباشرة
+const SUPABASE_URL = 'https://pfywzbdhnxybgxesptgj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmeXd6YmRobnh5Ymd4ZXNwdGdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjU5MTgsImV4cCI6MjA3NzI0MTkxOH0.a4l-_A_TcwfEhJy7Xuly1KMUS4KFhiOOjXbByYtDbek';
+
+// إنشاء عميل Supabase
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// التحقق من حالة المصادقة
+async function checkAuthState() {
+    try {
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        
+        if (error) {
+            console.error('Error checking auth:', error);
+            return false;
+        }
+        
+        if (!session) {
+            window.location.href = 'login.html';
+            return false;
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        return false;
+    }
+}
+
+// جلب الخدمات من Supabase
+async function getServices() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('services')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching services:', error);
+            return { success: false, error };
+        }
+
+        return { success: true, data };
+    } catch (error) {
+        console.error('Failed to fetch services:', error);
+        return { success: false, error };
+    }
+}
+
+// تسجيل الخروج
+async function logout() {
+    try {
+        const { error } = await supabaseClient.auth.signOut();
+        
+        if (error) {
+            console.error('Logout error:', error);
+            return;
+        }
+        
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
+
+// عرض الخدمات في الواجهة
+function displayServices(services) {
+    const servicesGrid = document.querySelector('.services-grid');
+    if (!servicesGrid) return;
+
+    servicesGrid.innerHTML = services.map(service => `
+        <div class="service-card">
+            <div class="service-badge">${service.base_price > 100 ? 'الأكثر طلباً' : 'جديد'}</div>
+            <div class="service-icon">
+                <i class="fas fa-${getServiceIcon(service.service_name)}"></i>
+            </div>
+            <div class="service-content">
+                <h3>${service.service_name}</h3>
+                <p>${service.description || 'خدمة احترافية بجودة عالية'}</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check"></i> خدمة سريعة ومضمونة</li>
+                    <li><i class="fas fa-check"></i> فنيون محترفون</li>
+                    <li><i class="fas fa-check"></i> أسعار تنافسية</li>
+                </ul>
+                <div class="service-price">${service.base_price} ل.س <span>/ الأساسي</span></div>
+                <button class="btn btn-primary" data-service-id="${service.id}">
+                    طلب الخدمة
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// تحديد الأيقونة المناسبة للخدمة
+function getServiceIcon(serviceName) {
+    const icons = {
+        'كهرباء': 'bolt',
+        'سباكة': 'faucet',
+        'دهان': 'paint-roller',
+        'نجارة': 'tools',
+        'تكييف': 'fan',
+        'عام': 'toolbox'
+    };
+    
+    for (const [key, icon] of Object.entries(icons)) {
+        if (serviceName.includes(key)) return icon;
+    }
+    return 'tools';
+}
+
+// إعداد أزرار طلب الخدمة
+function setupServiceButtons() {
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-primary') && e.target.closest('.service-card')) {
+            const serviceCard = e.target.closest('.service-card');
+            const serviceName = serviceCard.querySelector('h3').textContent;
+            const servicePrice = serviceCard.querySelector('.service-price').textContent;
+            
+            // توجيه إلى صفحة حجز الخدمة مع بيانات الخدمة
+            const serviceId = e.target.getAttribute('data-service-id');
+            window.location.href = `book-service.html?service=${serviceId}&name=${encodeURIComponent(serviceName)}&price=${encodeURIComponent(servicePrice)}`;
+        }
+    });
+}
+
+// إضافة تأثيرات التمرير للبطاقات
+function setupScrollAnimations() {
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    serviceCards.forEach(card => {
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+}
+
+// التهيئة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', async function() {
+    // التحقق من المصادقة
+    const isAuthenticated = await checkAuthState();
+    
+    if (!isAuthenticated) {
+        return;
+    }
+
+    // جلب وعرض الخدمات
+    const result = await getServices();
+    if (result.success && result.data) {
+        displayServices(result.data);
+    } else {
+        // استخدام بيانات افتراضية في حالة الخطأ
+        const defaultServices = [
+            {
+                id: 1,
+                service_name: "خدمات الكهرباء",
+                description: "إصلاح وتركيب جميع الأعمال الكهربائية المنزلية",
+                base_price: 150,
+                category: "كهرباء"
+            },
+            {
+                id: 2,
+                service_name: "خدمات السباكة",
+                description: "إصلاح تسريبات المياه وتركيب الأدوات الصحية",
+                base_price: 120,
+                category: "سباكة"
+            }
+        ];
+        displayServices(defaultServices);
+    }
+
+    // إعداد الأزرار والتأثيرات
+    setupServiceButtons();
+    setupScrollAnimations();
+
+    // إعداد زر تسجيل الخروج
+    const logoutBtn = document.getElementById('logout');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - تسجيل الدخول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2D5B7A;
+            --secondary: #4F8A8B;
+            --accent: #FFCB74;
+            --light: #F8F5F0;
+            --dark: #2C3E50;
+            --success: #5CB85C;
+            --warning: #F0AD4E;
+            --danger: #D9534F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(45, 91, 122, 0.03) 0%, rgba(79, 138, 139, 0.03) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        /* Auth Section */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 40px 0;
+        }
+
+        .auth-box {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .auth-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .auth-header h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            margin: 15px auto 0;
+            max-width: 300px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--accent);
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .auth-forms {
+            position: relative;
+            height: 80svh;
+            overflow-y: auto;
+        }
+
+        .auth-form {
+            padding: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            pointer-events: none;
+        }
+
+        .auth-form.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+        .teclog{
+          position: fixed;
+          right: 10px;
+          bottom: 10px;
+          padding: 10px 10px;
+          background: var(--secondary);
+          color: var(--accent);
+          border-radius: 10px;
+          border:1px solid black;
+          font-size: .9em;
+          
+        }
+        .teclog a{
+          text-decoration: none;
+          color: var(--accent);
+        }
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 91, 122, 0.1);
+            outline: none;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .input-icon .form-control {
+            padding-left: 45px;
+        }
+
+        .btn {
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #FFB74D;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 203, 116, 0.4);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .auth-box {
+                margin: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+  <!--   <header>
+      <div class="container">
+          <div class="header-content">
+              <div class="logo">
+                  <i class="fas fa-tools"></i>
+                  <h1>ورشة</h1>
+              </div>
+          </div>
+      </div>
+  </header> -->
+
+    <!-- Auth Section -->
+    <section class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h2>مرحباً بك في ورشة</h2>
+                <p>جميع خدمات المنزل بحرفية عالية</p>
+                <div class="auth-tabs">
+                    <div class="auth-tab active" id="login-tab">تسجيل الدخول</div>
+                    <div class="auth-tab" id="register-tab">إنشاء حساب</div>
+                </div>
+                
+            </div>
+
+            <div class="auth-forms">
+                <!-- Login Form -->
+                <form class="auth-form active" id="login-form">
+                    <div id="login-alert"></div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" class="form-control" id="login-email" placeholder="البريد الإلكتروني" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" class="form-control" id="login-password" placeholder="كلمة المرور" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="login-btn">
+                            تسجيل الدخول
+                        </button>
+                    </div>
+                    
+                    <div class="auth-footer">
+                        <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+                    </div>
+
+                    <div class="auth-footer">
+                        ليس لديك حساب؟ <a href="#" id="go-to-register">إنشاء حساب</a>
+                    </div>
+                </form>
+
+                <!-- Register Form -->
+                <form class="auth-form" 
+                
+                id="register-form">
+                    <div id="register-alert"></div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" class="form-control" id="register-firstname" placeholder="الاسم الأول" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" class="form-control" id="register-lastname" placeholder="اسم العائلة" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" class="form-control" id="register-email" placeholder="البريد الإلكتروني" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" class="form-control" id="register-phone" placeholder="رقم الهاتف" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" class="form-control" id="register-password" placeholder="كلمة المرور" required minlength="6">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" class="form-control" id="register-confirm-password" placeholder="تأكيد كلمة المرور" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="register-btn">
+                            إنشاء حساب
+                        </button>
+                    </div>
+
+                    <div class="auth-footer">
+                        لديك حساب بالفعل؟ <a href="#" id="go-to-login">تسجيل الدخول</a>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+       
+    </section>
+<div class="teclog"><a href="teclogin.html">انضم لفريقنا الفني</a></div>
+    <!-- Footer -->
+   <!--  <footer>
+       <div class="container">
+           <div class="copyright">
+               <p>© 2023 ورشة. جميع الحقوق محفوظة</p>
+           </div>
+       </div>
+   </footer> -->
+
+    <script type="module">
+        import AuthService from './js/auth.js';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const goToRegister = document.getElementById('go-to-register');
+            const goToLogin = document.getElementById('go-to-login');
+            
+            const loginBtn = document.getElementById('login-btn');
+            const registerBtn = document.getElementById('register-btn');
+            
+            const loginAlert = document.getElementById('login-alert');
+            const registerAlert = document.getElementById('register-alert');
+
+            // دوال التبديل بين النماذج
+            function switchToRegister() {
+                loginTab.classList.remove('active');
+                registerTab.classList.add('active');
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                clearAlerts();
+            }
+
+            function switchToLogin() {
+                registerTab.classList.remove('active');
+                loginTab.classList.add('active');
+                registerForm.classList.remove('active');
+                loginForm.classList.add('active');
+                clearAlerts();
+            }
+
+            function clearAlerts() {
+                loginAlert.innerHTML = '';
+                registerAlert.innerHTML = '';
+            }
+
+            function showAlert(container, message, type = 'error') {
+                container.innerHTML = `
+                    <div class="alert alert-${type}">
+                        ${message}
+                    </div>
+                `;
+            }
+
+            function setLoading(button, isLoading) {
+                if (isLoading) {
+                    button.disabled = true;
+                    button.innerHTML = 'جاري المعالجة <span class="loading"></span>';
+                } else {
+                    button.disabled = false;
+                    if (button.id === 'login-btn') {
+                        button.innerHTML = 'تسجيل الدخول';
+                    } else {
+                        button.innerHTML = 'إنشاء حساب';
+                    }
+                }
+            }
+
+            // event listeners للتبديل
+            registerTab.addEventListener('click', switchToRegister);
+            goToRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchToRegister();
+            });
+
+            loginTab.addEventListener('click', switchToLogin);
+            goToLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchToLogin();
+            });
+
+            // تسجيل الدخول
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                if (!email || !password) {
+                    showAlert(loginAlert, 'يرجى ملء جميع الحقول');
+                    return;
+                }
+
+                setLoading(loginBtn, true);
+                clearAlerts();
+
+                try {
+                    const result = await AuthService.signIn(email, password);
+                    
+                    if (result.success) {
+                        showAlert(loginAlert, 'تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        showAlert(loginAlert, result.error || 'حدث خطأ أثناء تسجيل الدخول');
+                    }
+                } catch (error) {
+                    showAlert(loginAlert, 'حدث خطأ غير متوقع');
+                    console.error('Login error:', error);
+                } finally {
+                    setLoading(loginBtn, false);
+                }
+            });
+
+            // إنشاء حساب
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('register-firstname').value;
+                const lastName = document.getElementById('register-lastname').value;
+                const email = document.getElementById('register-email').value;
+                const phone = document.getElementById('register-phone').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+
+                // التحقق من صحة البيانات
+                if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+                    showAlert(registerAlert, 'يرجى ملء جميع الحقول');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showAlert(registerAlert, 'كلمات المرور غير متطابقة');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert(registerAlert, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                    return;
+                }
+
+                setLoading(registerBtn, true);
+                clearAlerts();
+
+                try {
+                    const userData = {
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        password
+                    };
+
+                    const result = await AuthService.signUp(userData);
+                    
+                    if (result.success) {
+                        showAlert(registerAlert, 
+                            'تم إنشاء الحساب بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب.', 
+                            'success'
+                        );
+                        
+                        // تفريغ النموذج
+                        registerForm.reset();
+                        
+                        // الانتقال إلى صفحة تسجيل الدخول بعد 3 ثواني
+                        setTimeout(() => {
+                            switchToLogin();
+                        }, 3000);
+                    } else {
+                        showAlert(registerAlert, result.error || 'حدث خطأ أثناء إنشاء الحساب');
+                    }
+                } catch (error) {
+                    showAlert(registerAlert, 'حدث خطأ غير متوقع أثناء إنشاء الحساب');
+                    console.error('Registration error:', error);
+                } finally {
+                    setLoading(registerBtn, false);
+                }
+            });
+
+            // مساعدة في إدخال البيانات للتجربة
+            function fillDemoData() {
+                if (window.location.search.includes('demo=true')) {
+                    document.getElementById('login-email').value = 'demo@example.com';
+                    document.getElementById('login-password').value = '123456';
+                    
+                    document.getElementById('register-firstname').value = 'محمد';
+                    document.getElementById('register-lastname').value = 'أحمد';
+                    document.getElementById('register-email').value = 'test@example.com';
+                    document.getElementById('register-phone').value = '0912345678';
+                    document.getElementById('register-password').value = '123456';
+                    document.getElementById('register-confirm-password').value = '123456';
+                }
+            }
+
+            fillDemoData();
+        });
+        // التحقق إذا كان المستخدم مسجل الدخول بالفعل
+async function checkExistingAuth() {
+    const authResult = await AuthService.getSession();
+    if (authResult.success && authResult.data.session) {
+        // توجيه مباشر إلى الخدمات
+        //window.location.href = 'services.html';
+    }
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+checkExistingAuth();
+    </script>
+</body>
+</html>

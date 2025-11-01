@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورشة - طلباتي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Modern Color Palette */
+        :root {
+            --primary-blue: #0A3D62;
+            --secondary-teal: #077987;
+            --accent-orange: #FF8C00;
+            --light-bg: #F0F4F8;
+            --white: #ffffff;
+            --gray-text: #555;
+            --dark-text: #222;
+            --border-light: #e0e0e0;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+            /* Status Colors */
+            --status-pending: #FFD166;
+            --status-confirmed: #66BB6A;
+            --status-in-progress: #2196F3;
+            --status-completed: #4CAF50;
+            --status-cancelled: #F44336;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-teal));
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-medium);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--accent-orange);
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            font-weight: 500;
+            transition: color 0.3s ease-in-out;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--accent-orange);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Page Hero Section */
+        .page-hero {
+            background: linear-gradient(rgba(10, 61, 98, 0.8), rgba(7, 121, 135, 0.7));
+            color: var(--white);
+            padding: 3rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-hero h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-orange);
+            transition: color 0.3s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--white);
+        }
+        
+        .breadcrumb i {
+            margin: 0 0.3rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            margin-bottom: 2rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--white);
+            padding: 1.5rem 1rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-light);
+            height: fit-content;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .user-avatar {
+            width: 5rem;
+            height: 5rem;
+            background: var(--light-bg);
+            border-radius: 50%;
+            margin: 0 auto 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-email {
+            color: var(--gray-text);
+            font-size: 0.85rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: var(--gray-text);
+            border-radius: 0.7rem;
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(to left, var(--primary-blue), var(--secondary-teal));
+            color: var(--white);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .sidebar-menu i {
+            margin-left: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Orders Content */
+        .orders-main-content {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .orders-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .orders-section-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+        
+        .orders-filter-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 0.6rem;
+            font-size: 0.9rem;
+            background-color: var(--white);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 0.8rem center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            min-width: 150px;
+        }
+        
+        /* Orders Tabs */
+        .orders-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+            gap: 0.5rem;
+        }
+
+        .orders-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .order-tab {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray-text);
+            transition: all 0.3s ease-in-out;
+            white-space: nowrap;
+            position: relative;
+            font-size: 0.9rem;
+            border-radius: 0.5rem;
+        }
+        
+        .order-tab:hover {
+            color: var(--primary-blue);
+            background: var(--light-bg);
+        }
+
+        .order-tab.active {
+            color: var(--primary-blue);
+            background: var(--light-bg);
+        }
+
+        .order-tab-badge {
+            background: var(--accent-orange);
+            color: var(--white);
+            padding: 2px 6px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+        }
+
+        /* Order Cards */
+        .orders-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .order-card {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid var(--border-light);
+        }
+        
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .order-card-header {
+            background: var(--light-bg);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 0.9rem;
+        }
+
+        .order-date {
+            font-size: 0.8rem;
+            color: var(--gray-text);
+        }
+
+        .order-card-body {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .order-service-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+            margin: 0 auto;
+        }
+        
+        .order-details {
+            text-align: center;
+        }
+
+        .order-details h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .order-details p {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .order-technician {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .technician-avatar {
+            width: 2rem;
+            height: 2rem;
+            background: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--primary-blue);
+            margin-left: 0.5rem;
+        }
+
+        .technician-name {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+
+        .order-status-info {
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--white);
+            display: inline-block;
+        }
+
+        .status-pending { background-color: var(--status-pending); }
+        .status-confirmed { background-color: var(--status-confirmed); }
+        .status-in-progress { background-color: var(--status-in-progress); }
+        .status-completed { background-color: var(--status-completed); }
+        .status-cancelled { background-color: var(--status-cancelled); }
+
+        .order-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-top: 0.5rem;
+        }
+
+        .order-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-direction: column;
+            padding: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .action-btn {
+            padding: 0.7rem 1rem;
+            border-radius: 0.6rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .action-btn-primary {
+            background: linear-gradient(to right, var(--accent-orange), #FFB600);
+            color: var(--white);
+        }
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
+        }
+
+        .action-btn-secondary {
+            background: transparent;
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        .action-btn-secondary:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+        
+        .action-btn-danger {
+            background: transparent;
+            border: 1px solid var(--status-cancelled);
+            color: var(--status-cancelled);
+        }
+        .action-btn-danger:hover {
+            background: var(--status-cancelled);
+            color: var(--white);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray-text);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--border-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-text);
+            color: var(--white);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.6rem;
+            transition: all 0.2s ease-in-out;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-column li:hover {
+            color: var(--accent-orange);
+        }
+        
+        .footer-column li i {
+            margin-left: 0.5rem;
+            color: var(--accent-orange);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--white);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-orange);
+            color: var(--primary-blue);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-text);
+        }
+
+        .loading-spinner {
+            border: 3px solid var(--light-bg);
+            border-top: 3px solid var(--primary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+            
+            .header-content {
+                flex-wrap: nowrap;
+            }
+            
+            nav ul {
+                justify-content: flex-end;
+            }
+
+            .dashboard-layout {
+                grid-template-columns: 280px 1fr;
+            }
+
+            .orders-section-header {
+                flex-wrap: nowrap;
+            }
+            
+            .orders-filter-group {
+                flex-wrap: nowrap;
+            }
+
+            .order-card-body {
+                grid-template-columns: 80px 1fr auto;
+                text-align: initial;
+                align-items: center;
+            }
+            
+            .order-service-icon {
+                margin: 0;
+            }
+            
+            .order-details {
+                text-align: initial;
+            }
+
+            .order-technician {
+                justify-content: flex-start;
+            }
+            
+            .order-status-info {
+                margin-top: 0;
+                text-align: right;
+            }
+            
+            .order-card-actions {
+                flex-direction: row;
+                justify-content: flex-end;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                text-align: initial;
+            }
+
+            .footer-column li {
+                justify-content: flex-start;
+            }
+            
+            .social-links {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .page-hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            nav a {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .orders-filter-group {
+                width: 100%;
+            }
+            
+            .filter-select {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .order-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.8rem;
+            }
+            
+            .page-hero {
+                padding: 2rem 0;
+            }
+            
+            .page-hero h2 {
+                font-size: 1.7rem;
+            }
+            
+            .orders-main-content {
+                padding: 1rem;
+            }
+            
+            .orders-section-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .order-tab {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .action-btn {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i>
+                    <h1>ورشة</h1>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="services.html">الخدمات</a></li>
+                        <li><a href="technicians.html">فنيونا</a></li>
+                        <li><a href="my-orders.html" class="active">طلباتي</a></li>
+                        <li><a href="help.html">المساعدة</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h2>طلباتي</h2>
+            <ul class="breadcrumb">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><i class="fas fa-chevron-left"></i></li>
+                <li>طلباتي</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="dashboard-layout">
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-name" id="userName">جاري التحميل...</div>
+                    <div class="user-email" id="userEmail">جاري التحميل...</div>
+                </div>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="fas fa-clipboard-list"></i> طلباتي</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user-circle"></i> الملف الشخصي</a></li>
+                    
+                </ul>
+            </aside>
+            
+            <main class="orders-main-content">
+                <div class="orders-section-header">
+                    <h2>طلباتي السابقة</h2>
+                    <div class="orders-filter-group">
+                        <select class="filter-select" id="sortSelect">
+                            <option value="newest">الأحدث أولاً</option>
+                            <option value="oldest">الأقدم أولاً</option>
+                        </select>
+                        <select class="filter-select" id="serviceSelect">
+                            <option value="all">جميع الخدمات</option>
+                            <option value="electricity">كهرباء</option>
+                            <option value="plumbing">سباكة</option>
+                            <option value="painting">دهان</option>
+                            <option value="carpentry">نجارة</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="orders-filter-group">
+    <select class="filter-select" id="statusSelect" style="margin-bottom:10px;">
+        <option value="all">الجميع</option>
+        <option value="pending">قيد الانتظار</option>
+        <option value="confirmed">تم التأكيد</option>
+        <option value="in-progress">قيد التنفيذ</option>
+        <option value="completed">مكتمل</option>
+        <option value="cancelled">ملغي</option>
+    </select>
+    
+</div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="loading-spinner"></div>
+                    <p>جاري تحميل الطلبات...</p>
+                </div>
+                
+                <div class="orders-grid" id="ordersGrid">
+                    <!-- سيتم تعبئة الطلبات هنا بواسطة JavaScript -->
+                </div>
+                
+                <div class="empty-state hidden" id="emptyState">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا يوجد طلبات</h3>
+                    <p>يبدو أنك لم تقم بتقديم أي طلبات حتى الآن. يمكنك استعراض خدماتنا وطلب الخدمة التي تحتاجها.</p>
+                    <a href="services.html" class="action-btn action-btn-primary" style="width: auto; display: inline-block;">استعراض الخدمات</a>
+                </div>
+            </main>
+        </div>
+    </section>
+
+  
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://pfywzbdhnxybgxesptgj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmeXd6YmRobnh5Ymd4ZXNwdGdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjU5MTgsImV4cCI6MjA3NzI0MTkxOH0.a4l-_A_TcwfEhJy7Xuly1KMUS4KFhiOOjXbByYtDbek';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Global variables
+        let currentUser = null;
+        let userOrders = [];
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize mobile menu
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mainNav = document.getElementById('mainNav');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+            });
+            
+            // Load user data and orders
+            await loadUserData();
+            await loadUserOrders();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+        
+        async function loadUserData() {
+            try {
+                // Get current session
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    console.error('Error getting session:', error);
+                    return;
+                }
+                
+                if (!session) {
+                    // Redirect to login if not authenticated
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                currentUser = session.user;
+                
+                // Get user profile from customers table
+                const { data: customer, error: customerError } = await supabase
+                    .from('customers')
+                    .select('*')
+                    .eq('email', currentUser.email)
+                    .single();
+                
+                if (customerError) {
+                    console.error('Error fetching customer data:', customerError);
+                    return;
+                }
+                
+                // Display user info
+                document.getElementById('userName').textContent = `${customer.first_name} ${customer.last_name || ''}`;
+                document.getElementById('userEmail').textContent = customer.email;
+                
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        async function loadUserOrders() {
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const ordersGrid = document.getElementById('ordersGrid');
+    const emptyState = document.getElementById('emptyState');
+    
+    try {
+        loadingIndicator.classList.remove('hidden');
+        ordersGrid.classList.add('hidden');
+        emptyState.classList.add('hidden');
+        
+        if (!currentUser) {
+            await loadUserData();
+            if (!currentUser) {
+                showEmptyState();
+                return;
+            }
+        }
+        
+        console.log('جلب الطلبات للمستخدم UUID:', currentUser.id);
+        
+        // البحث باستخدام customer_id (UUID) من authentication
+        const { data: orders, error } = await supabase
+            .from('appointments')
+            .select('*')
+            .eq('customer_id', currentUser.id)
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('خطأ في جلب الطلبات:', error);
+            showEmptyState();
+            return;
+        }
+        
+        userOrders = orders || [];
+        
+        console.log('الطلبات التي سيتم عرضها:', userOrders);
+        
+        if (userOrders.length === 0) {
+            console.log('لا توجد طلبات للمستخدم');
+            showEmptyState();
+        } else {
+            console.log(`تم العثور على ${userOrders.length} طلب`);
+            displayOrders(userOrders);
+            updateOrderCounts(userOrders);
+        }
+        
+    } catch (error) {
+        console.error('خطأ في تحميل الطلبات:', error);
+        showEmptyState();
+    } finally {
+        loadingIndicator.classList.add('hidden');
+    }
+}
+// دالة مساعدة للبحث باستخدام البريد الإلكتروني
+async function loadOrdersByEmail() {
+    // إذا كان customer_name هو البريد الإلكتروني في جدول appointments
+    const { data: orders, error } = await supabase
+        .from('appointments')
+        .select('*')
+        .eq('customer_name', currentUser.email)
+        .order('created_at', { ascending: false });
+    
+    if (error) {
+        console.error('خطأ في جلب الطلبات:', error);
+        return;
+    }
+    
+    userOrders = orders || [];
+}
+        
+        function displayOrders(orders) {
+            const ordersGrid = document.getElementById('ordersGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (orders.length === 0) {
+                showEmptyState();
+                return;
+            }
+            
+            ordersGrid.innerHTML = '';
+            ordersGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            
+            orders.forEach(order => {
+                const orderCard = createOrderCard(order);
+                ordersGrid.appendChild(orderCard);
+            });
+        }
+        
+        function createOrderCard(order) {
+    const card = document.createElement('div');
+    card.className = `order-card`;
+    card.setAttribute('data-status', mapStatusToClass(order.status));
+    
+    const statusText = getStatusText(order.status);
+    const serviceIcon = getServiceIcon(order.service_type);
+    
+    // استخدام البيانات من الجدول مباشرة
+    const technicianName = order.tecksended;
+    const formattedDate = formatDate(order.created_at || order.appointment_date);
+    const formattedPrice = formatPrice(order.price);
+    
+    card.innerHTML = `
+        <div class="order-card-header">
+            <div class="order-id">طلب #${order.id}</div>
+            <div class="order-date">${formattedDate}</div>
+        </div>
+        <div class="order-card-body">
+            <div class="order-service-icon">
+                <i class="${serviceIcon}"></i>
+            </div>
+            <div class="order-details">
+                <h3>${order.service_name || 'خدمة عامة'}</h3>
+                <p>${order.notes || 'لا توجد تفاصيل إضافية'}</p>
+                <div class="order-technician">
+                    <div class="technician-avatar"><i class="fas fa-user"></i></div>
+                    <div class="technician-name">${technicianName}</div>
+                </div>
+            </div>
+            <div class="order-status-info">
+                <span class="status-badge status-${mapStatusToClass(order.status)}">${statusText}</span>
+                <div class="order-price">${formattedPrice}</div>
+            </div>
+        </div>
+        <div class="order-card-actions">
+            <button class="action-btn action-btn-primary">تفاصيل الطلب</button>
+            ${order.status === 'pending' ? 
+                `<button class="action-btn action-btn-danger" onclick="cancelOrder(${order.id})">إلغاء الطلب</button>` : 
+                ''
+            }
+            ${order.status === 'completed' ? 
+                `<button class="action-btn action-btn-secondary">إعادة طلب الخدمة</button>` : 
+                ''
+            }
+        </div>
+    `;
+    
+    return card;
+}
+        
+        function mapStatusToClass(status) {
+            const statusMap = {
+                'pending': 'pending',
+                'confirmed': 'confirmed',
+                'in-progress': 'in-progress',
+                'completed': 'completed',
+                'cancelled': 'cancelled'
+            };
+            
+            return statusMap[status] || 'pending';
+        }
+        
+        function getStatusText(status) {
+            const statusTexts = {
+                'pending': 'قيد الانتظار',
+                'confirmed': 'تم التأكيد',
+                'in-progress': 'قيد التنفيذ',
+                'completed': 'مكتمل',
+                'cancelled': 'ملغي'
+            };
+            
+            return statusTexts[status] || 'قيد الانتظار';
+        }
+        
+        function getServiceIcon(serviceType) {
+            const iconMap = {
+                'electricity': 'fas fa-bolt',
+                'plumbing': 'fas fa-faucet',
+                'painting': 'fas fa-paint-roller',
+                'carpentry': 'fas fa-hammer',
+                'default': 'fas fa-tools'
+            };
+            
+            return iconMap[serviceType] || iconMap.default;
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'غير محدد';
+            
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        function formatPrice(price) {
+            if (!price || price === 0) return 'لم يتم التسعير بعد';
+            return `${price} ل.س`;
+        }
+        
+        function updateOrderCounts(orders) {
+            const counts = {
+                all: orders.length,
+                pending: 0,
+                confirmed: 0,
+                'in-progress': 0,
+                completed: 0,
+                cancelled: 0
+            };
+            
+            orders.forEach(order => {
+                if (counts.hasOwnProperty(order.status)) {
+                    counts[order.status]++;
+                }
+            });
+            
+            document.getElementById('allCount').textContent = counts.all;
+            document.getElementById('pendingCount').textContent = counts.pending;
+            document.getElementById('confirmedCount').textContent = counts.confirmed;
+            document.getElementById('inProgressCount').textContent = counts['in-progress'];
+            document.getElementById('completedCount').textContent = counts.completed;
+            document.getElementById('cancelledCount').textContent = counts.cancelled;
+        }
+        
+        function setupEventListeners() {
+            // Order tabs filtering
+            const orderTabs = document.querySelectorAll('.order-tab');
+            orderTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    orderTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Filter orders
+                    const filter = tab.getAttribute('data-filter');
+                    filterOrders(filter);
+                });
+            });
+            
+            // Sort select
+            const sortSelect = document.getElementById('sortSelect');
+            sortSelect.addEventListener('change', () => {
+                sortOrders(sortSelect.value);
+            });
+            
+            // Service filter
+            const serviceSelect = document.getElementById('serviceSelect');
+            serviceSelect.addEventListener('change', () => {
+                filterOrdersByService(serviceSelect.value);
+            });
+            const statusSelect = document.getElementById('statusSelect');
+    statusSelect.addEventListener('change', () => {
+        filterOrders(statusSelect.value);
+    });
+        }
+        function updateOrderCounts(orders) {
+    const counts = {
+        all: orders.length,
+        pending: 0,
+        confirmed: 0,
+        'in-progress': 0,
+        completed: 0,
+        cancelled: 0
+    };
+    
+    orders.forEach(order => {
+        if (counts.hasOwnProperty(order.status)) {
+            counts[order.status]++;
+        }
+    });
+    
+    // تحديث خيارات الـ select لإظهار العداد
+    updateSelectOptions(counts);
+}
+
+function updateSelectOptions(counts) {
+    const statusSelect = document.getElementById('statusSelect');
+    
+    // تحديث النص لكل option مع العداد
+    statusSelect.querySelector('option[value="all"]').textContent = `الجميع (${counts.all})`;
+    statusSelect.querySelector('option[value="pending"]').textContent = `قيد الانتظار (${counts.pending})`;
+    statusSelect.querySelector('option[value="confirmed"]').textContent = `تم التأكيد (${counts.confirmed})`;
+    statusSelect.querySelector('option[value="in-progress"]').textContent = `قيد التنفيذ (${counts['in-progress']})`;
+    statusSelect.querySelector('option[value="completed"]').textContent = `مكتمل (${counts.completed})`;
+    statusSelect.querySelector('option[value="cancelled"]').textContent = `ملغي (${counts.cancelled})`;
+}
+        function filterOrders(status) {
+            const ordersGrid = document.getElementById('ordersGrid');
+            const orderCards = ordersGrid.querySelectorAll('.order-card');
+            
+            orderCards.forEach(card => {
+                if (status === 'all' || card.getAttribute('data-status') === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show empty state if no cards are visible
+            const visibleCards = Array.from(orderCards).filter(card => card.style.display !== 'none');
+            if (visibleCards.length === 0) {
+                showEmptyState();
+            } else {
+                document.getElementById('emptyState').classList.add('hidden');
+            }
+        }
+        
+        function filterOrdersByService(service) {
+            // This would need to be implemented based on your data structure
+            // For now, we'll just reload all orders
+            loadUserOrders();
+        }
+        
+        function sortOrders(sortBy) {
+            const sortedOrders = [...userOrders];
+            
+            if (sortBy === 'newest') {
+                sortedOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            } else if (sortBy === 'oldest') {
+                sortedOrders.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            }
+            
+            displayOrders(sortedOrders);
+        }
+        
+        function showEmptyState() {
+            const ordersGrid = document.getElementById('ordersGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            ordersGrid.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+        }
+        
+        async function cancelOrder(orderId) {
+            if (!confirm('هل أنت متأكد من إلغاء هذا الطلب؟')) {
+                return;
+            }
+            
+            try {
+                const { error } = await supabase
+                    .from('appointments')
+                    .update({ status: 'cancelled' })
+                    .eq('id', orderId);
+                
+                if (error) {
+                    console.error('Error cancelling order:', error);
+                    alert('حدث خطأ أثناء إلغاء الطلب. يرجى المحاولة مرة أخرى.');
+                    return;
+                }
+                
+                alert('تم إلغاء الطلب بنجاح.');
+                await loadUserOrders();
+                
+            } catch (error) {
+                console.error('Error cancelling order:', error);
+                alert('حدث خطأ أثناء إلغاء الطلب. يرجى المحاولة مرة أخرى.');
+            }
+        }
+    </script>
+</body>
+</html>
