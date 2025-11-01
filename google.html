@@ -1,0 +1,19 @@
+<html>
+<head>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div id="g_id_onload"
+         data-client_id="826642994593-1g4vd4gdq7p7sv14rk54232ep2ji1ke6.apps.googleusercontent.com"
+         data-callback="handleLogin">
+    </div>
+    <div class="g_id_signin" data-type="standard" data-theme="filled_blue"></div>
+
+    <script>
+        function handleLogin(response) {
+            alert('تم التسجيل بنجاح!');
+            console.log(response);
+        }
+    </script>
+</body>
+</html>
